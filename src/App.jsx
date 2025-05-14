@@ -1,12 +1,19 @@
-import './App.css'
+import "./App.css";
+import Player from "./Components/Player.jsx";
 
 function App() {
-
   return (
     <>
-     <h1>¡Empecemos a jugar!</h1>
+      <main>
+        <div id="game-container">
+          <ol id="playersContainer">
+            <Player name="Gonzalo" playerSymbol="✖️" />
+            <Player name="Anaís" playerSymbol="⭕" />
+          </ol>
+        </div>
+      </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
