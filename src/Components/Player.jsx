@@ -3,7 +3,7 @@ import "./Player.css";
 
 export default function Player({ name, playerSymbol }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [playersName, setPlayersName] = useState("");
+  const [playersName, setPlayersName] = useState(name);
   const inputRef = useRef(null);
 
   function savePlayersName(event) {
@@ -42,7 +42,8 @@ export default function Player({ name, playerSymbol }) {
           <input
             type="text"
             ref={inputRef}
-            placeholder="Player's name"
+            required
+            defaultValue={playersName}
             onChange={savePlayersName}
             onKeyDown={handleKeyDown}
           />
