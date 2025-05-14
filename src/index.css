@@ -39,21 +39,23 @@ body {
 }
 
 header {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center ;
+  align-items: center;
+  margin-top: 3rem;
 }
 
 header img {
   width: 10rem;
   border-radius: 2rem;
   object-fit: contain;
-  margin: 3rem auto 1rem auto;
   filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
 }
 
 h1 {
   font-family: 'Caprasimo', cursive;
   font-size: 2.3rem;
-  margin: 0 auto 3rem auto;
   color: #DEDEDE;
 }
 
