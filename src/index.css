@@ -1,7 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Roboto+Slab:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Caprasimo&family=Roboto+Slab:wght@400;700&display=swap");
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 :root {
@@ -11,10 +13,15 @@
   --color-text: #e1dec7;
   --color-highlight: #f6e35a;
 
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  overflow-x: auto;
 }
 
 html {
-  font-family: 'Roboto Slab', sans-serif;
+  font-family: "Roboto Slab", sans-serif;
   line-height: 1.5;
 
   color: #ebe7ef;
@@ -32,7 +39,7 @@ body {
       rgba(64, 44, 2, 0.98),
       rgba(57, 2, 64, 0.87)
     ),
-    url('bg-pattern-dark.png');
+    url("bg-pattern-dark.png");
   background-repeat: repeat;
   background-size: 100% 100%, 30% 30%, 100% 100%;
   min-height: 110rem;
@@ -41,7 +48,7 @@ body {
 header {
   display: flex;
   flex-direction: column;
-  justify-content: center ;
+  justify-content: center;
   align-items: center;
   margin-top: 3rem;
 }
@@ -54,9 +61,9 @@ header img {
 }
 
 h1 {
-  font-family: 'Caprasimo', cursive;
+  font-family: "Caprasimo", cursive;
   font-size: 2.3rem;
-  color: #DEDEDE;
+  color: #dedede;
 }
 
 #game-container {
@@ -65,10 +72,8 @@ h1 {
   padding: 2rem;
   border-radius: 6px;
   background: linear-gradient(#000034, #000034a3);
-  box-shadow:
-    -5px 0 15px rgba(255, 0, 255, 0.5),
-    0 -5px 15px rgba(255, 0, 255, 0.5),
-    5px 0 15px rgba(241, 112, 12, 0.5),
+  box-shadow: -5px 0 15px rgba(255, 0, 255, 0.5),
+    0 -5px 15px rgba(255, 0, 255, 0.5), 5px 0 15px rgba(241, 112, 12, 0.5),
     0 5px 15px rgba(241, 112, 12, 0.5);
   position: relative;
 }
@@ -84,9 +89,11 @@ h1 {
 }
 
 @media (max-width: 860px) {
-  #playersContainer{
+  #playersContainer {
     flex-direction: column;
+    gap: 0rem;
   }
+
 }
 
 ol {
@@ -104,7 +111,7 @@ ol {
   background: none;
   color: #f8c031;
   border: none;
-  font-family: 'Caprasimo', cursive;
+  font-family: "Caprasimo", cursive;
   font-size: 4rem;
   text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
   animation: pulse-text-size 2s infinite ease-out;
@@ -137,7 +144,7 @@ ol {
   color: #3f3b00;
   font-size: 5rem;
   cursor: pointer;
-  font-family: 'Caprasimo', cursive;
+  font-family: "Caprasimo", cursive;
   padding: 1rem;
 }
 
@@ -156,7 +163,7 @@ ol {
 }
 
 #game-over h2 {
-  font-family: 'Caprasimo', cursive;
+  font-family: "Caprasimo", cursive;
   font-size: 4rem;
   text-align: center;
   color: #fcd256;
@@ -216,7 +223,7 @@ ol {
 }
 
 #game-hints h2 {
-  font-family: 'Caprasimo', cursive;
+  font-family: "Caprasimo", cursive;
   font-size: 2rem;
   margin: 0;
 }
@@ -285,7 +292,6 @@ ol {
     box-shadow: 0 0 0 0 rgba(246, 227, 90, 0);
   }
 }
-
 
 @keyframes pop-in {
   0% {

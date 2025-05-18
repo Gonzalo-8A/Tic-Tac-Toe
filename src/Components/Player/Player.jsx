@@ -10,7 +10,7 @@ export default function Player({ name, playerSymbol }) {
     setPlayersName(event.target.value);
   }
 
-  function handleChangeName() {
+  function handleNameChange() {
     if (isEditing) {
       const trimmed = playersName?.trim();
 
@@ -20,12 +20,12 @@ export default function Player({ name, playerSymbol }) {
       }
     }
 
-    setIsEditing(!isEditing);
+    setIsEditing((isEditing) => !isEditing);
   }
 
   function handleKeyDown(e) {
     if (e.key === "Enter") {
-      handleChangeName();
+      handleNameChange();
     }
   }
 
@@ -44,7 +44,7 @@ export default function Player({ name, playerSymbol }) {
             ref={inputRef}
             required
             defaultValue={playersName}
-            onChange={savePlayersName}
+            onChange={(event) => savePlayersName(event)}
             onKeyDown={handleKeyDown}
           />
         ) : (
@@ -52,7 +52,7 @@ export default function Player({ name, playerSymbol }) {
         )}
         <span className="player-symbol">{playerSymbol}</span>
       </span>
-      <button onClick={handleChangeName}>
+      <button onClick={() => {handleNameChange()}}>
         {isEditing ? "Guardar" : "Cambiar"}
       </button>
     </li>

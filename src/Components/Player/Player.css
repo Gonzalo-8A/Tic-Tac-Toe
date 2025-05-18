@@ -1,7 +1,7 @@
 #playersContainer li {
   display: flex;
   align-items: center;
-  width: 50%;
+  justify-content: center;
   border: 2px solid transparent;
 }
 
@@ -43,7 +43,6 @@
 
 .player-name {
   display: inline-block;
-  width: 10rem;
   font-size: 1.2rem;
   color: #e1dec7;
   text-transform: uppercase;

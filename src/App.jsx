@@ -1,5 +1,6 @@
 import "./App.css";
-import Player from "./Components/Player.jsx";
+import Player from "./Components/Player/Player.jsx";
+import GameBoard from "./Components/GameBoard/GameBoard.jsx";
 
 function App() {
   return (
@@ -7,9 +8,10 @@ function App() {
       <main>
         <div id="game-container">
           <ol id="playersContainer">
-            <Player name="Gonzalo" playerSymbol="✖️" />
-            <Player name="Anaís" playerSymbol="⭕" />
+            <Player key={"player1"} name="Player 1" playerSymbol="✖️" />
+            <Player key={"player2"} name="Player 2" playerSymbol="⭕" />
           </ol>
+        <GameBoard />
         </div>
       </main>
     </>
