@@ -3,7 +3,7 @@ import Player from "./Components/Player/Player.jsx";
 import GameBoard from "./Components/GameBoard/GameBoard.jsx";
 import { useState } from "react";
 
-const steps = ["start", "gameBoard", "playerSetup", "gameBoard"];
+const steps = ["start", "modeSelection", "playerSetup", "gameBoard"];
 
 function App() {
   const [stepIndex, setStepIndex] = useState(0);
@@ -14,6 +14,7 @@ function App() {
     setStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
   }
 
+  // eslint-disable-next-line no-unused-vars
   function goToPrevStep() {
     setStepIndex((prev) => Math.max(prev - 1, 0));
   }
@@ -25,7 +26,7 @@ function App() {
           {gameStep === "start" && (
             <button
               id="start_game"
-              className={gameStep === "start" ? "fade-in" : "fade-out"}
+              className={`game_button ${gameStep === "start" ? "fade-in" : "fade-out"}`}
               onClick={goToNextStep}
             >
               Empezar a jugar
@@ -37,7 +38,20 @@ function App() {
               gameStep === "modeSelection" ? "show" : "hidden"
             }`}
           >
-            {gameStep === "modeSelection" && <ModeSelection />}
+            {gameStep === "modeSelection" && 
+              // <ModeSelection />
+              <>
+                <h2 className="modeSelection-title">Elige un modo de juego</h2>
+                <div className="buttons-container">
+                  <button className="game_button">
+                    1 jugador
+                  </button>
+                  <button className="game_button">
+                    2 jugadores
+                  </button>
+                </div>
+              </>
+            }
           </div>
 
           <div
