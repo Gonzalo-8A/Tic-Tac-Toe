@@ -12,7 +12,7 @@ const winningLines = getWinningLines(Array(9).fill(null));
 export default function GameBoard() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(TURNS.x);
-  const [winner, setWinner] = useState(false);
+  const [winner, setWinner] = useState(null);
 
   function checkWinner(index, currentBoard) {
     const possibleWinningLines = winningLines.filter((line) =>
@@ -36,6 +36,12 @@ export default function GameBoard() {
     if (hasWinner) {
       alert(`${turn} Wins!`);
     }
+  }
+
+  function resetGame () {
+    setBoard(Array(9).fill(null))
+    setTurn(TURNS.x)
+    setWinner(null)
   }
 
   function handleBoardChange(index) {

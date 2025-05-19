@@ -2,6 +2,7 @@ import "./App.css";
 import Player from "./Components/Player/Player.jsx";
 import GameBoard from "./Components/GameBoard/GameBoard.jsx";
 import { useState } from "react";
+import Button from "./Components/Button/Button.jsx";
 
 const steps = ["start", "modeSelection", "playerSetup", "gameBoard"];
 
@@ -20,58 +21,85 @@ function App() {
   }
 
   return (
-    <>
-      <main>
-        <div id="game-container">
-          {gameStep === "start" && (
-            <button
-              id="start_game"
-              className={`game_button ${gameStep === "start" ? "fade-in" : "fade-out"}`}
-              onClick={goToNextStep}
-            >
-              Empezar a jugar
-            </button>
+    <main>
+      <div id="game-container">
+        {gameStep === "start" && (
+          <Button
+            id="game-start"
+            className={gameStep === "start" ? "fade-in" : "fade-out"}
+            onClick={goToNextStep}
+          >
+            Empezar a jugar
+          </Button>
+        )}
+
+        <div
+          className={`game-content ${
+            gameStep === "modeSelection" ? "show" : "hidden"
+          }`}
+        >
+          {gameStep === "modeSelection" && (
+            <>
+              <h2 className="modeSelection-title">Elige un modo de juego</h2>
+              <div className="buttons-container">
+                <Button
+                  id="1-player-game"
+                  className={
+                    gameStep === "modeSelection" ? "fade-in" : "fade-out"
+                  }
+                  onClick={goToNextStep}
+                >
+                  1 jugador
+                </Button>
+                <Button
+                  id="2-players-game"
+                  className={
+                    gameStep === "modeSelection" ? "fade-in" : "fade-out"
+                  }
+                  onClick={goToNextStep}
+                >
+                  2 jugadores
+                </Button>
+              </div>
+            </>
           )}
+        </div>
 
-          <div
-            className={`game-content ${
-              gameStep === "modeSelection" ? "show" : "hidden"
-            }`}
-          >
-            {gameStep === "modeSelection" && 
-              // <ModeSelection />
-              <>
-                <h2 className="modeSelection-title">Elige un modo de juego</h2>
-                <div className="buttons-container">
-                  <button className="game_button">
-                    1 jugador
-                  </button>
-                  <button className="game_button">
-                    2 jugadores
-                  </button>
-                </div>
-              </>
-            }
-          </div>
+        <div
+          className={`game-content ${
+            gameStep === "playerSetup" ? "show" : "hidden"
+          }`}
+        >
+          {gameStep === "playerSetup" && (
+            // <PlayerSetUp />
+            <>
+              <ol id="playersContainer">
+                <Player name="Player 1" playerSymbol="✖️" />
+                <Player name="Player 2" playerSymbol="⭕" />
+              </ol>
+              <button
+                className={`game_button ${
+                  gameStep === "playerSetup" ? "fade-in" : "fade-out"
+                }`}
+                onClick={goToNextStep}
+              >
+                Empezar a jugar
+              </button>
+            </>
+          )}
+        </div>
 
-          <div
-            className={`game-content ${
-              gameStep === "playerSetup" ? "show" : "hidden"
-            }`}
-          >
-            {gameStep === "playerSetup" && <PlayerSetUp />}
-          </div>
-
+        {gameStep === "gameBoard" && (
           <div
             className={`game-content ${
               gameStep === "gameBoard" ? "show" : "hidden"
             }`}
           >
-            {gameStep === "gameBoard" && <GameBoard />}
+            <GameBoard />
           </div>
-        </div>
-      </main>
-    </>
+        )}
+      </div>
+    </main>
   );
 }
 
