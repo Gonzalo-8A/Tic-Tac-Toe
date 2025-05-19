@@ -25,8 +25,15 @@
   box-shadow: -5px 0 15px rgba(255, 0, 255, 0.5),
     0 -5px 15px rgba(255, 0, 255, 0.5), 5px 0 15px rgba(241, 112, 12, 0.5),
     0 5px 15px rgba(241, 112, 12, 0.5);
-  
 }
 
-/* .cell_content {
-} */
+.game_cell:hover {
+  box-shadow: -5px 0 15px rgb(255, 0, 255),
+    0 -5px 15px rgba(255, 0, 255), 5px 0 15px rgba(241, 112, 12),
+    0 5px 15px rgba(241, 112, 12);
+}
+
+.game_cell.filled {
+  box-shadow: none;
+  cursor: default;
+}

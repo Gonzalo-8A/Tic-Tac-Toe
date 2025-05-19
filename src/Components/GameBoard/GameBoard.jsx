@@ -12,6 +12,7 @@ const winningLines = getWinningLines(Array(9).fill(null));
 export default function GameBoard() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(TURNS.x);
+  const [winner, setWinner] = useState(false);
 
   function checkWinner(index, currentBoard) {
     const possibleWinningLines = winningLines.filter((line) =>
@@ -28,6 +29,9 @@ export default function GameBoard() {
       return line.every((cell) => cell === first);
     });
     const hasWinner = winners.some(Boolean);
+    if (hasWinner) {
+      setWinner(true);
+    }
 
     if (hasWinner) {
       alert(`${turn} Wins!`);
@@ -36,6 +40,7 @@ export default function GameBoard() {
 
   function handleBoardChange(index) {
     if (board[index]) return;
+    if (winner) return;
     const newBoard = [...board];
     newBoard[index] = turn;
     setBoard(newBoard);
@@ -49,13 +54,13 @@ export default function GameBoard() {
   return (
     <>
       <section id="gameBoard">
-        {board.map((_, index) => (
+        {board.map((cell, index) => (
           <div
-            className="game_cell"
+            className={`game_cell ${cell ? "filled" : ""}`}
             onClick={() => handleBoardChange(index)}
             key={`cell ${index}`}
           >
-            <span className="cell_content">{board[index]}</span>
+            <span className="cell_content">{cell}</span>
           </div>
         ))}
       </section>

@@ -1,1 +1,44 @@
+#start_game {
+  font-family: "Caprasimo", cursive;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  padding: 1rem 2.5rem;
+  color: #fff;
+  background: linear-gradient(135deg, #ff00ff, #ff6a00);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.6), 0 0 20px rgba(255, 106, 0, 0.6),
+    0 0 30px rgba(255, 0, 255, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
+#start_game:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.8), 0 0 25px rgba(255, 106, 0, 0.8),
+    0 0 35px rgba(255, 0, 255, 0.5);
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.8s ease-in;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+
+
+.game-content.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+
+.game-content.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
