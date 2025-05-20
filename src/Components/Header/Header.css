@@ -2,7 +2,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: clamp(0rem, 1vh, 1rem);
+  margin-top: 2rem;
 }
 header h1 {
   font-family: "Caprasimo", cursive;
@@ -10,10 +10,16 @@ header h1 {
   color: #dedede;
 }
 
+header a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 header img {
   width: clamp(4rem, 15vh, 10rem);
   border-radius: clamp(1rem, 1vh , 2rem);
-  margin-right: 2rem;
+  margin: 0 1rem;
   object-fit: contain;
   filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
   cursor: pointer;

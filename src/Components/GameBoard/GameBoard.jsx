@@ -58,7 +58,7 @@ export default function GameBoard({ goToStart, playersInfo }) {
 
   return (
     <>
-      {winner === null && <PlayersTurn turn={turn} playersInfo={playersInfo}/>}
+      <PlayersTurn winner={winner} turn={turn} playersInfo={playersInfo}/>
       <section
         id="game-board"
         className={`game-board ${winner !== null ? "blur" : ""}`}

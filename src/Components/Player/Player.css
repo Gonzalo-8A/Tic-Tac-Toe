@@ -58,7 +58,7 @@
 .player input {
   font: inherit;
   font-size: clamp(1rem, 4vmin, 3rem);
-  width: clamp(6rem, 10vw, 20rem);
+  width: clamp(6rem, 20vmin, 20rem);
   color: white;
   border: none;
   padding: 0.5rem;

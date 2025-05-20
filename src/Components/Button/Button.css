@@ -20,6 +20,14 @@
   font-size: clamp(1rem, 3vmin, 2rem);
   padding: 1rem clamp(1rem, 2vmin, 2rem);
   margin-top: 3rem;
+  transition: bottom 1s ease, left 1s ease;
+}
+
+@media (max-width: 630px) and (min-height: 660px) {
+  .game_button.back {
+    bottom: -5rem;
+    left: unset;
+  }
 }
 
 .game_button:hover {
@@ -39,4 +47,3 @@
 .buttons-container button {
   width: 100%;
 }
-
