@@ -38,6 +38,7 @@ export default function GameBoard() {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   function resetGame () {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.x)

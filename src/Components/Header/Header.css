@@ -1,0 +1,14 @@
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+header img {
+  width: 10rem;
+  border-radius: 2rem;
+  margin-right: 2rem;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
+}
