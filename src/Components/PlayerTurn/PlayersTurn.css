@@ -1,4 +1,5 @@
 #playersTurn{
-  margin: 0 auto 2rem;
-  font-size: 2rem;
+  margin: 1rem auto 1rem;
+  font-size: clamp(1rem, 5vmin, 2rem);
+  text-wrap: nowrap;
 }

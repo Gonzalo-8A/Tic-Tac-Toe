@@ -98,9 +98,6 @@ function App() {
                 </ol>
                 <Button
                   id="game-start-btn"
-                  className={
-                    gameStep === "playerSetup" ? "fade-in" : "fade-out"
-                  }
                   onClick={goToNextStep}
                 >
                   Empezar a jugar

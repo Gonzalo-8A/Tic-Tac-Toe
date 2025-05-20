@@ -1,15 +1,23 @@
 #gameBoardContainer {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 .game-board {
   display: grid;
-  grid-template-columns: repeat(3, clamp(3rem, 20vw, 10rem));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 2rem;
   justify-content: center;
   justify-items: center;
   align-content: center;
   margin: 1rem 0 1rem;
   transition: filter 0.3s ease;
+  aspect-ratio: 1 / 1;
+  height: 100%;
 }
 
 .game-board.blur {
@@ -17,17 +25,19 @@
 }
 
 .game_cell {
-  width: clamp(3rem, 20vw, 10rem);
-  height: clamp(3rem, 20vw, 10rem);
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 8rem;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
   color: #ccc;
-  font-size: clamp(3rem, 11vw, 5rem);
+  font-size: clamp(1rem, 5vmin, 6rem);
   cursor: pointer;
   font-family: "Caprasimo", cursive;
-  padding: 1rem;
+  padding: 2vmin;
   border-radius: 6px;
   background: linear-gradient(#4e1a4c, rgba(0, 0, 52, 0.346));
   box-shadow: -5px 0 15px rgba(255, 0, 255, 0.5),

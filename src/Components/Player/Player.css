@@ -27,7 +27,7 @@
   text-align: center;
   border: 1px solid #e7872d;
   border-radius: 7px;
-  margin-left: 1rem;
+  margin: 0 1rem;
 }
 
 #playersContainer button:hover {
@@ -39,11 +39,12 @@
   padding: 0.5rem;
   border-radius: 4px;
   font-weight: bold;
+  text-wrap: nowrap;
 }
 
 .player-name {
   display: inline-block;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vmin, 3rem);
   color: #e1dec7;
   text-transform: uppercase;
   margin: 0;
@@ -51,12 +52,14 @@
   border-radius: 4px;
   text-overflow: ellipsis;
   text-align: center;
+  
 }
 
 .player input {
   font: inherit;
-  font-size: 1.2rem;
-  width: 11rem;
+  font-size: clamp(1rem, 4vmin, 3rem);
+  width: clamp(6rem, 10vw, 20rem);
+  color: white;
   border: none;
   padding: 0.5rem;
   animation: pulse-text 2s infinite;
@@ -67,7 +70,36 @@
 
 .player-symbol {
   margin-left: 1rem;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vmin, 3rem);
   color: #e1dec7;
 }
 
+/* @media (max-height: 850px) {
+  .player-name, .player-input, .player-symbol{
+    font-size: clamp(1rem, 5vh, 3rem);
+  }
+} */
+
+@keyframes pulse-text {
+  0% {
+    color: #e1dec7;
+  }
+  50% {
+    color: #9f9d83;
+  }
+  100% {
+    color: #e1dec7;
+  }
+}
+
+@keyframes pulse-text-size {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

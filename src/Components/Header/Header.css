@@ -2,14 +2,26 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: clamp(0rem, 1vh, 1rem);
+}
+header h1 {
+  font-family: "Caprasimo", cursive;
+  font-size: clamp(1.5rem, 4vh , 2.5rem);
+  color: #dedede;
 }
 
 header img {
-  width: 10rem;
-  border-radius: 2rem;
+  width: clamp(4rem, 15vh, 10rem);
+  border-radius: clamp(1rem, 1vh , 2rem);
   margin-right: 2rem;
   object-fit: contain;
   filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
   cursor: pointer;
 }
+
+/* @media (max-height: 950px) {
+  header img {
+    
+    border-radius: 1rem;
+  }
+} */

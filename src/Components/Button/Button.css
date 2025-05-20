@@ -1,7 +1,7 @@
 .game_button {
   font-family: "Caprasimo", cursive;
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  padding: 1rem 2.5rem;
+  font-size: clamp(1.5rem, 4vmin, 2.5rem);
+  padding: 1rem clamp(1rem, 3vmin, 2.5rem);
   color: #fff;
   background: linear-gradient(135deg, #ff00ff, #ff6a00);
   border: none;
@@ -10,14 +10,15 @@
   box-shadow: 0 0 10px rgba(255, 0, 255, 0.6), 0 0 20px rgba(255, 106, 0, 0.6),
     0 0 30px rgba(255, 0, 255, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-wrap: nowrap;
 }
 
-.game_button.back{
+.game_button.back {
   position: absolute;
   bottom: 2rem;
   left: 2rem;
-  font-size: clamp(1rem, 3vw, 2rem);
-  padding: 1rem 2rem;
+  font-size: clamp(1rem, 3vmin, 2rem);
+  padding: 1rem clamp(1rem, 2vmin, 2rem);
   margin-top: 3rem;
 }
 
@@ -29,9 +30,13 @@
 
 .buttons-container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 2rem;
 }
 
-.buttons-container button{
-  width: 20rem;
+.buttons-container button {
+  width: 100%;
 }
+
