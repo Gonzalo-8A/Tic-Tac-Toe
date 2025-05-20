@@ -2,6 +2,7 @@ import { useState } from "react";
 import PlayersTurn from "../PlayerTurn/PlayersTurn.jsx";
 import GameResult from "../GameResult/GameResult.jsx";
 import { getWinningLines } from "../../../data.js";
+import confetti from "canvas-confetti";
 import "./GameBoard.css";
   
 const winningLines = getWinningLines(Array(9).fill(null));
@@ -22,6 +23,7 @@ export default function GameBoard({ goToStart, playersInfo }) {
         newBoard[a] === newBoard[b] &&
         newBoard[a] === newBoard[c]
       ) {
+        confetti()
         setWinner(newBoard[a]);
         return newBoard[a];
       }
