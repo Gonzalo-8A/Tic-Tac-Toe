@@ -1,11 +1,14 @@
 import './PlayersTurn.css'
 
-export default function PlayersTurn({ turn }) {
+export default function PlayersTurn({ turn, playersInfo }) {
+  
+  const { name, symbol } = playersInfo[turn]
+  
   return (
     <>
-      <div id="playersTurn">
-        <span>Turno de {turn}</span>
-      </div>
+      <section id="playersTurn">
+        <span>Turno de {name} {symbol}</span>
+      </section>
     </>
   )
 }

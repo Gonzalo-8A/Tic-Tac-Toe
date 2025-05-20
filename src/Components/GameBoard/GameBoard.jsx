@@ -1,69 +1,71 @@
 import { useState } from "react";
 import PlayersTurn from "../PlayerTurn/PlayersTurn.jsx";
+import GameResult from "../GameResult/GameResult.jsx";
 import { getWinningLines } from "../../../data.js";
 import "./GameBoard.css";
-
-const TURNS = {
-  x: "✖️",
-  o: "⭕",
-};
+  
 const winningLines = getWinningLines(Array(9).fill(null));
 
-export default function GameBoard() {
+export default function GameBoard({ goToStart, playersInfo }) {
   const [board, setBoard] = useState(Array(9).fill(null));
-  const [turn, setTurn] = useState(TURNS.x);
+  const [turn, setTurn] = useState(1);
   const [winner, setWinner] = useState(null);
 
-  function checkWinner(index, currentBoard) {
+  function checkWinner(index, newBoard) {
     const possibleWinningLines = winningLines.filter((line) =>
       line.includes(index)
     );
-    const values = possibleWinningLines.map((line) =>
-      line.map((i) => currentBoard[i])
-    );
-
-    const winners = values.map((line) => {
-      const first = line[0];
-      if (!first) return false;
-
-      return line.every((cell) => cell === first);
-    });
-    const hasWinner = winners.some(Boolean);
-    if (hasWinner) {
-      setWinner(true);
+    for (const line of possibleWinningLines) {
+      const [a, b, c] = line;
+      if (
+        newBoard[a] &&
+        newBoard[a] === newBoard[b] &&
+        newBoard[a] === newBoard[c]
+      ) {
+        setWinner(newBoard[a]);
+        return newBoard[a];
+      }
     }
 
-    if (hasWinner) {
-      alert(`${turn} Wins!`);
+    if(!newBoard.includes(null)){
+      setWinner(false)
+      return false
     }
+
+    return null;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  function resetGame () {
-    setBoard(Array(9).fill(null))
-    setTurn(TURNS.x)
-    setWinner(null)
+  function resetGame() {
+    setBoard(Array(9).fill(null));
+    setTurn(1);
+    setWinner(null);
   }
 
   function handleBoardChange(index) {
-    if (board[index]) return;
-    if (winner) return;
+    if (board[index] || winner) return;
+
     const newBoard = [...board];
-    newBoard[index] = turn;
+    newBoard[index] = playersInfo[turn].symbol;
     setBoard(newBoard);
 
     checkWinner(index, newBoard);
 
-    const newTurn = turn === TURNS.x ? TURNS.o : TURNS.x;
+    const newTurn = turn === 1 ? 2 : 1;
     setTurn(newTurn);
   }
 
   return (
     <>
-      <section id="gameBoard">
+      {winner === null && <PlayersTurn turn={turn} playersInfo={playersInfo}/>}
+      <section
+        id="game-board"
+        className={`game-board ${winner !== null ? "blur" : ""}`}
+      >
         {board.map((cell, index) => (
           <div
-            className={`game_cell ${cell ? "filled" : ""}`}
+            className={`game_cell ${cell ? "filled" : ""} ${
+              winner ? "no-hover" : ""
+            }`}
             onClick={() => handleBoardChange(index)}
             key={`cell ${index}`}
           >
@@ -71,7 +73,7 @@ export default function GameBoard() {
           </div>
         ))}
       </section>
-      <PlayersTurn turn={turn} />
+      {winner !== null && <GameResult turn={turn} winner={winner} playersInfo={playersInfo} goToStart={goToStart} resetGame={resetGame} />}
     </>
   );
 }

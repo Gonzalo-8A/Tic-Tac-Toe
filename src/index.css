@@ -51,7 +51,7 @@ h1 {
   color: #dedede;
 }
 
-#game-container {
+.game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -104,16 +104,6 @@ ol {
   font-size: 4rem;
   text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
   animation: pulse-text-size 2s infinite ease-out;
-}
-
-#game-board {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  margin: 3rem 0;
-  padding: 0;
-  flex-direction: column;
 }
 
 #game-board ol {

@@ -2,24 +2,25 @@
 import { motion } from "framer-motion";
 import "./StepContainer.css";
 
-const variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 20 },
-};
+export default function StepContainer({ children, variants, ...props }) {
+  const defaultVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 20 },
+  };
 
-export default function StepContainer({ key, children }) {
   return (
     <motion.div
-      key={key}
-      variants={variants}
+      className="game-content"
+      {...props}
+      variants={variants || defaultVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
       transition={{ duration: 0.8 }}
-      className="game-content"
     >
       {children}
     </motion.div>
   );
 }
+

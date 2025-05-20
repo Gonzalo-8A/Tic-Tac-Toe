@@ -12,6 +12,16 @@ const steps = ["start", "modeSelection", "playerSetup", "gameBoard"];
 
 function App() {
   const [stepIndex, setStepIndex] = useState(0);
+  const [playersInfo, setPlayersInfo] = useState({
+    1: {
+      name: "Jugador 1",
+      symbol: "✖️",
+    },
+    2: {
+      name: "Jugador 2",
+      symbol: "⭕",
+    },
+  });
 
   const gameStep = steps[stepIndex];
 
@@ -24,14 +34,18 @@ function App() {
     setStepIndex((prev) => Math.max(prev - 1, 0));
   }
 
+  function goToStart() {
+    setStepIndex(0);
+  }
+
   return (
     <>
       <Header />
       <main>
         <AnimatePresence exitBeforeEnter>
-          <div id="game-container">
+          <div id="game-container" className="game-container">
             {gameStep === "start" && (
-              <StepContainer key="start">
+              <StepContainer id="startContainer">
                 <Button
                   id="game-start"
                   className={gameStep === "start" ? "fade-in" : "fade-out"}
@@ -43,7 +57,7 @@ function App() {
             )}
 
             {gameStep === "modeSelection" && (
-              <StepContainer key="modeSelection">
+              <StepContainer id="modeSelectionContainer">
                 <h2 className="modeSelection-title">Elige un modo de juego</h2>
                 <div className="buttons-container">
                   <Button
@@ -69,11 +83,19 @@ function App() {
             )}
 
             {gameStep === "playerSetup" && (
-              <StepContainer key="playerSetup">
+              <StepContainer id="playerSetupContainer">
                 <h2 className="playerSetup-title">Elige un nombre</h2>
                 <ol id="playersContainer">
-                  <Player name="Player 1" playerSymbol="✖️" />
-                  <Player name="Player 2" playerSymbol="⭕" />
+                  <Player
+                    player={1}
+                    playersInfo={playersInfo}
+                    setPlayersInfo={setPlayersInfo}
+                  />
+                  <Player
+                    player={2}
+                    playersInfo={playersInfo}
+                    setPlayersInfo={setPlayersInfo}
+                  />
                 </ol>
                 <Button
                   id="game-start-btn"
@@ -86,10 +108,10 @@ function App() {
                 </Button>
               </StepContainer>
             )}
-            
+
             {gameStep === "gameBoard" && (
-              <StepContainer key="gameBoard">
-                <GameBoard />
+              <StepContainer id="gameBoardContainer">
+                <GameBoard goToStart={goToStart} playersInfo={playersInfo}/>
               </StepContainer>
             )}
           </div>
@@ -98,11 +120,5 @@ function App() {
     </>
   );
 }
-
-// <ol id="playersContainer">
-//  <Player name="Player 1" playerSymbol="✖️" />
-//  <Player name="Player 2" playerSymbol="⭕" />
-// </ol>
-// <GameBoard />
 
 export default App;

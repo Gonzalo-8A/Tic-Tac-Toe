@@ -1,25 +1,22 @@
 import { useState, useRef, useEffect } from "react";
 import "./Player.css";
 
-export default function Player({ name, playerSymbol }) {
+export default function Player({ player, playersInfo, setPlayersInfo }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [playersName, setPlayersName] = useState(name);
   const inputRef = useRef(null);
 
-  function savePlayersName(event) {
-    setPlayersName(event.target.value);
-  }
+  function savePlayersName(e) {
+    const { value } = e.target;
+    setPlayersInfo(prev => ({
+      ...prev,
+      [player]: {
+        ...prev[player],
+        name: value.toUpperCase()
+      }
+    }));
+  };
 
   function handleNameChange() {
-    if (isEditing) {
-      const trimmed = playersName?.trim();
-
-      if (!trimmed) {
-        alert("El nombre no puede estar vacío o solo con espacios.");
-        return;
-      }
-    }
-
     setIsEditing((isEditing) => !isEditing);
   }
 
@@ -43,14 +40,14 @@ export default function Player({ name, playerSymbol }) {
             type="text"
             ref={inputRef}
             required
-            defaultValue={playersName}
+            defaultValue=""
             onChange={(event) => savePlayersName(event)}
             onKeyDown={handleKeyDown}
           />
         ) : (
-          <span className="player-name">{playersName || name}</span>
+          <span className="player-name">{playersInfo[player].name || player}</span>
         )}
-        <span className="player-symbol">{playerSymbol}</span>
+        <span className="player-symbol">{playersInfo[player].symbol}</span>
       </span>
       <button onClick={() => {handleNameChange()}}>
         {isEditing ? "Guardar" : "Cambiar"}
@@ -58,3 +55,4 @@ export default function Player({ name, playerSymbol }) {
     </li>
   );
 }
+
