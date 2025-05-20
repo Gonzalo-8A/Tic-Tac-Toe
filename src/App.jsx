@@ -29,7 +29,6 @@ function App() {
     setStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
   }
 
-  // eslint-disable-next-line no-unused-vars
   function goToPrevStep() {
     setStepIndex((prev) => Math.max(prev - 1, 0));
   }
@@ -40,7 +39,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header goToStart={goToStart}/>
       <main>
         <AnimatePresence exitBeforeEnter>
           <div id="game-container" className="game-container">
@@ -114,6 +113,10 @@ function App() {
                 <GameBoard goToStart={goToStart} playersInfo={playersInfo}/>
               </StepContainer>
             )}
+          {gameStep === "playerSetup" &&
+          <Button className={'back'} onClick={goToPrevStep}>
+            Atrás
+          </Button>}
           </div>
         </AnimatePresence>
       </main>

@@ -1,9 +1,9 @@
 import './Header.css'
 
-export default function Header() {
+export default function Header({ goToStart }) {
   return (
     <header>
-      <img src="logoTicTacToe.png" alt="Logo del juego Tic-Tac-Toe" />
+      <a onClick={goToStart}><img src="logoTicTacToe.png" alt="Logo del juego Tic-Tac-Toe" /></a>
       <h1>Tic-Tac-Toe</h1>
     </header>
   );
