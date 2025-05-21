@@ -1,27 +1,27 @@
-import { useState, useRef, useEffect } from "react";
-import "./Player.css";
+import { useState, useRef, useEffect } from 'react';
+import './Player.css';
 
-export default function Player({ player, playersInfo, setPlayersInfo }) {
+export default function Player({ player, playersInfo, setPlayersInfo, isSinglePlayer }) {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef(null);
 
   function savePlayersName(e) {
     const { value } = e.target;
-    setPlayersInfo(prev => ({
+    setPlayersInfo((prev) => ({
       ...prev,
       [player]: {
         ...prev[player],
-        name: value.toUpperCase()
-      }
+        name: value.toUpperCase(),
+      },
     }));
-  };
+  }
 
   function handleNameChange() {
     setIsEditing((isEditing) => !isEditing);
   }
 
   function handleKeyDown(e) {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleNameChange();
     }
   }
@@ -49,10 +49,9 @@ export default function Player({ player, playersInfo, setPlayersInfo }) {
         )}
         <span className="player-symbol">{playersInfo[player].symbol}</span>
       </span>
-      <button onClick={() => {handleNameChange()}}>
-        {isEditing ? "Guardar" : "Cambiar"}
-      </button>
+      {(player === 1 || (player === 2 && !isSinglePlayer)) && (
+        <button onClick={handleNameChange}>{isEditing ? 'Guardar' : 'Cambiar'}</button>
+      )}
     </li>
   );
 }
-

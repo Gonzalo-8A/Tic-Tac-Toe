@@ -6,7 +6,7 @@ export default function PlayersTurn({ winner, turn, playersInfo }) {
   
   return (
     <>
-      <section id="playersTurn" className={winner ? "hide" : ''}>
+      <section id="playersTurn" className={winner !== null ? "hide" : ''}>
         <span>Turno de {name} {symbol}</span>
       </section>
     </>

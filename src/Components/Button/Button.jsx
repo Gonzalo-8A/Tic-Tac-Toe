@@ -1,11 +1,14 @@
 import './Button.css'
 
-export default function Button({ className, onClick, children, ...props }) {
+export default function Button({ styles = '', onClick, setGameMode, children, ...props }) {
   return (
     <button
       {...props}
-      className={`game_button ${className}`}
-      onClick={onClick}
+      className={`game-button ${styles}`}
+      onClick={() => {
+        onClick?.();
+        setGameMode?.();
+      }}
     >
       {children}
     </button>
