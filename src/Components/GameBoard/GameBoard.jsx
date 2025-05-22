@@ -34,7 +34,7 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
   useEffect(() => {
     if (isSinglePlayer && turn === 2 && !winner) {
       const timeoutId = setTimeout(() => {
-        const aiMoveIndex = getAIMove(board, playersInfo[2].symbol);
+        const aiMoveIndex = getAIMove(board, playersInfo[2].symbol, playersInfo[1].symbol);
         handleBoardChange(aiMoveIndex);
       }, 800);
 

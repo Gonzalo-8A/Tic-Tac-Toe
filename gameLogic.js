@@ -220,8 +220,7 @@ function getLastMove(board, aiSymbol) {
   }
 }
 
-export function getAIMove(board, aiSymbol) {
-  const playersSymbol = '✖️';
+export function getAIMove(board, aiSymbol, playersSymbol) {
 
   const winningMove = checkWinningMove(board, aiSymbol);
   if (winningMove !== null) return winningMove;

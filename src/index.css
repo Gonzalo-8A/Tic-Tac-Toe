@@ -18,15 +18,14 @@ html {
   padding: 0;
 }
 
-h2{
+h2 {
   font-size: 2rem;
 }
 
 html {
-  font-family: "Roboto Slab", sans-serif;
+  font-family: 'Roboto Slab', sans-serif;
   line-height: 1.5;
   color: #ebe7ef;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -41,8 +40,9 @@ body {
       rgba(57, 2, 64, 0.87)
     ),
     black;
-  background-repeat: repeat;
-  background-size: 100% 100%, 30% 30%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
   text-align: center;
   max-width: 1280px;
   margin: 0 auto;
@@ -61,8 +61,8 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: clamp(20rem, 70vmin ,49rem);
-  margin: 2rem auto 4rem;
+  width: clamp(20rem, 70vmin, 49rem);
+  margin: 2rem auto 2rem;
   padding: 2rem;
   border-radius: 6px;
   background: linear-gradient(#000034, #000034a3);
@@ -70,6 +70,12 @@ main {
     0 -5px 15px rgba(255, 0, 255, 0.5), 5px 0 15px rgba(241, 112, 12, 0.5),
     0 5px 15px rgba(241, 112, 12, 0.5);
   position: relative;
+}
+
+@media (max-width: 630px) {
+  .game-container {
+    margin: 0;
+  }
 }
 
 #playersContainer {
@@ -104,7 +110,7 @@ ol {
   color: #3f3b00;
   font-size: 5rem;
   cursor: pointer;
-  font-family: "Caprasimo", cursive;
+  font-family: 'Caprasimo', cursive;
   padding: 1rem;
 }
 

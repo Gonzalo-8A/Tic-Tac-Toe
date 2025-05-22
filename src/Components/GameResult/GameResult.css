@@ -13,7 +13,7 @@
 }
 
 .result-message {
-  font-size: clamp(1rem, 6vmin, 3rem);
+  font-size: clamp(1rem, 5vmin, 3rem);
   text-wrap: nowrap;
 }
 
@@ -31,6 +31,7 @@
     text-wrap: wrap;
     white-space: normal;
     word-wrap: break-word;
+    font-size: 1.6rem;
   }
 
   .result-btn-container {
