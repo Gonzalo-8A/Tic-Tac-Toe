@@ -72,6 +72,11 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
     }
   }, [winner]);
 
+  function handleClick(index) {
+    if(isSinglePlayer && turn === 2) return;
+    handleBoardChange(index)
+  }
+
   function resetGame() {
     setShowResult(false)
     setBoard(Array(9).fill(null));
@@ -102,7 +107,7 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
             className={`game_cell ${cell ? 'filled' : ''} ${
               winner ? 'no-hover' : ''
             }`}
-            onClick={() => handleBoardChange(index)}
+            onClick={() => handleClick(index)}
             key={`cell ${index}`}
           >
             <span className="cell-content">{cell}</span>
