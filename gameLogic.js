@@ -293,6 +293,9 @@ function goWin(board, playersSymbol, aiSymbol) {
               const thirdIndex = line.find(
                 (i) => i !== offensiveIndex && i !== rivalFork
               );
+              console.log("BlockFork")
+              console.log(filteredOffensiveIndexes)
+
               return board[thirdIndex] === aiSymbol;
             }
             return false;
@@ -300,6 +303,7 @@ function goWin(board, playersSymbol, aiSymbol) {
         }
       );
       const randomIndex = randomNum(filteredOffensiveIndexes);
+      console.log("randomFork")
       return filteredOffensiveIndexes[randomIndex];
     }
   }
@@ -349,9 +353,13 @@ function getLastMove(board, aiSymbol) {
       .filter((index) => index !== null);
 
     const randomIndex = randomNum(indexOptions);
+    console.log("LastMove")
     return indexOptions[randomIndex];
   }
 }
+
+  // Forzar inicio agresivo con Centro (O) -> Esquina (X) -> Esquina contraria (O) --> si board empty GoCorner --> si center(rival) && 1 - corner(me) -> GoOpossiteCorner
+  // Forzar Defensa en Centro (X) -> Esquina (O) -> Esquina contraria (X) (Eliminar laterales de posible respuesta) -> Bloquear esquinas (O)
 
 export function getAIMove(board, aiSymbol, playersSymbol) {
   const winningMove = checkWinningMove(board, aiSymbol);

@@ -64,7 +64,7 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
     } else if (winner === false) {
       const timeout = setTimeout(() => {
         setShowResult(true);
-      }, 300);
+      }, 150);
 
       return () => clearTimeout(timeout);
     } else {
