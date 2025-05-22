@@ -215,27 +215,55 @@ function checkWinningMove(board, checkingSymbol) {
   return null;
 }
 
-function checkFork(board, checkingSymbol, playersSymbol) {
-  const possibleForkLines = winningLines.filter((line) => {
-    const values = line.map((index) => board[index]);
-    return !values.includes(playersSymbol) && values.includes(checkingSymbol);
-  });
+function checkFork(board, checkingSymbol, opponentSymbol) {
+  const forkSpots = {};
 
-  const emptyForkSpots = {};
+  board.forEach((cell, index) => {
+    if (cell !== null) return;
 
-  possibleForkLines.forEach((line) => {
-    line.forEach((index) => {
-      if (board[index] === null) {
-        emptyForkSpots[index] = (emptyForkSpots[index] || 0) + 1;
+    const simulatedBoard = [...board];
+    simulatedBoard[index] = checkingSymbol;
+
+    let winningChances = 0;
+
+    winningLines.forEach((line) => {
+      const values = line.map((i) => simulatedBoard[i]);
+      const hasOpponent = values.includes(opponentSymbol);
+      const countSelf = values.filter((v) => v === checkingSymbol).length;
+      const countEmpty = values.filter((v) => v === null).length;
+
+      if (!hasOpponent && countSelf === 2 && countEmpty === 1) {
+        winningChances++;
       }
     });
+
+    if (winningChances >= 2) {
+      forkSpots[index] = winningChances;
+    }
   });
 
-  const forkIndex = Object.keys(emptyForkSpots).find(
-    (index) => emptyForkSpots[index] >= 2
-  );
+  const forkIndex = Object.keys(forkSpots)[0];
 
-  return forkIndex ? parseInt(forkIndex) : null;
+  if (forkIndex !== undefined) {
+    return parseInt(forkIndex);
+  } else {
+    return null;
+  }
+}
+
+function offensiveStart(board, aiSymbol, playersSymbol) {
+  if (board.every((el) => el === null)) {
+    return 0;
+  }
+  if (
+    board[0] === aiSymbol &&
+    board[4] === playersSymbol &&
+    board[8] === null
+  ) {
+    return 8;
+  } else {
+    return null;
+  }
 }
 
 function getCenter(board) {
@@ -281,11 +309,69 @@ function goWin(board, playersSymbol, aiSymbol) {
   ) {
     const posibleMoves = [1, 3, 5, 7].filter((i) => board[i] === null);
     const randomIndex = randomNum(posibleMoves);
-
+    console.log(`Go sides ${posibleMoves} ${posibleMoves[randomIndex]}`);
     return posibleMoves[randomIndex];
+  }
+
+  //Skip in Easy and Normal difficulty
+  function checkAggresiveOpen(board) {
+    const oppositeCorners = {
+      0: 8,
+      2: 6,
+      6: 2,
+      8: 0,
+    };
+
+    for (const xCorner of [0, 2, 6, 8]) {
+      const oCorner = oppositeCorners[xCorner];
+
+      if (
+        board[xCorner] === '✖️' &&
+        board[4] === '✖️' &&
+        board[oCorner] === '⭕'
+      ) {
+        const used = new Set([xCorner, 4, oCorner]);
+
+        const restAreNull = board.every((cell, i) => {
+          return used.has(i) || cell === null;
+        });
+
+        if (restAreNull) {
+          return oCorner;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  const oCorner = checkAggresiveOpen(board);
+  if (oCorner) {
+    
+    const sides = {
+      0: [1, 3],
+      2: [1, 5],
+      6: [3, 7],
+      8: [5, 7],
+    };
+
+    const sidesToRemove = sides[oCorner];
+
+    const filteredOptions = uniqueOffensiveIndexes.filter(
+      (index) => !sidesToRemove.includes(index)
+    );
+
+    const randomIndex = randomNum(filteredOptions);
+    return filteredOptions[randomIndex];
   } else {
     const rivalFork = checkFork(board, playersSymbol, aiSymbol);
     if (rivalFork) {
+      console.log(
+        'rivalFork:',
+        rivalFork,
+        'My options:',
+        uniqueOffensiveIndexes
+      );
       const filteredOffensiveIndexes = uniqueOffensiveIndexes.filter(
         (offensiveIndex) => {
           return !winningLines.some((line) => {
@@ -293,8 +379,7 @@ function goWin(board, playersSymbol, aiSymbol) {
               const thirdIndex = line.find(
                 (i) => i !== offensiveIndex && i !== rivalFork
               );
-              console.log("BlockFork")
-              console.log(filteredOffensiveIndexes)
+              console.log('BlockFork');
 
               return board[thirdIndex] === aiSymbol;
             }
@@ -302,8 +387,9 @@ function goWin(board, playersSymbol, aiSymbol) {
           });
         }
       );
+      console.log(filteredOffensiveIndexes);
       const randomIndex = randomNum(filteredOffensiveIndexes);
-      console.log("randomFork")
+      console.log('randomOffensive');
       return filteredOffensiveIndexes[randomIndex];
     }
   }
@@ -315,6 +401,7 @@ function getLastMove(board, aiSymbol) {
 
   if (cornersArray.every((i) => board[i] === null)) {
     const randomIndex = randomNum(cornersArray);
+    console.log('Go corner');
     return cornersArray[randomIndex];
   }
 
@@ -346,6 +433,7 @@ function getLastMove(board, aiSymbol) {
 
   if (uniqueOffensiveIndexes.length !== 0) {
     const randomIndex = randomNum(uniqueOffensiveIndexes);
+    console.log(`Go offensive ${uniqueOffensiveIndexes[randomIndex]}`);
     return uniqueOffensiveIndexes[randomIndex];
   } else {
     const indexOptions = board
@@ -353,33 +441,37 @@ function getLastMove(board, aiSymbol) {
       .filter((index) => index !== null);
 
     const randomIndex = randomNum(indexOptions);
-    console.log("LastMove")
+    console.log('LastMove');
     return indexOptions[randomIndex];
   }
 }
 
-  // Forzar inicio agresivo con Centro (O) -> Esquina (X) -> Esquina contraria (O) --> si board empty GoCorner --> si center(rival) && 1 - corner(me) -> GoOpossiteCorner
-  // Forzar Defensa en Centro (X) -> Esquina (O) -> Esquina contraria (X) (Eliminar laterales de posible respuesta) -> Bloquear esquinas (O)
-
 export function getAIMove(board, aiSymbol, playersSymbol) {
   const winningMove = checkWinningMove(board, aiSymbol);
+  console.log('winningMove llamado. Resultado: ', winningMove);
   if (winningMove !== null) return winningMove;
 
   const blockingMove = checkWinningMove(board, playersSymbol);
+  console.log('blockingMove llamado. Resultado: ', blockingMove);
   if (blockingMove !== null) return blockingMove;
 
+  const goOffensive = offensiveStart(board, aiSymbol, playersSymbol);
+  console.log('goOffensive llamado. Resultado: ', goOffensive);
+  if (goOffensive !== null) return goOffensive;
+
   const getCenterMove = getCenter(board);
+  console.log('getCenterMove llamado. Resultado: ', getCenterMove);
   if (getCenterMove !== null) return getCenterMove;
 
   const forkMove = checkFork(board, aiSymbol, playersSymbol);
+  console.log('forkMove llamado. Resultado: ', forkMove);
   if (forkMove !== null) return forkMove;
 
   const winMove = goWin(board, playersSymbol, aiSymbol);
+  console.log('winMove llamado. Resultado: ', winMove);
   if (winMove !== null) return winMove;
 
   const lastMove = getLastMove(board, aiSymbol);
+  console.log('lastMove llamado. Resultado: ', lastMove);
   if (lastMove !== null) return lastMove;
-
-  // const blockForkMove = checkFork(board, playersSymbol, aiSymbol);
-  // if (blockForkMove !== null) return blockForkMove;
 }
