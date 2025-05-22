@@ -17,8 +17,10 @@
   margin: 1rem 0 1rem;
   transition: filter 0.3s ease;
   aspect-ratio: 1 / 1;
-  height: 100%;
+  width: 100%;
+  max-width: 28rem;
   container: inline-size;
+  position: relative;
 }
 
 .game-board.blur {
@@ -34,7 +36,7 @@
   justify-content: center;
   align-items: center;
   border: none;
-  color: #ccc;
+  color: #9a3ade;
   font-size: clamp(1rem, 7cqmin, 5rem);
   cursor: pointer;
   font-family: "Caprasimo", cursive;
@@ -44,6 +46,7 @@
     0 -5px 15px rgba(255, 0, 255, 0.5), 5px 0 15px rgba(241, 112, 12, 0.5),
     0 5px 15px rgba(241, 112, 12, 0.5);
 }
+
 
 .game_cell:hover {
   box-shadow: -5px 0 15px rgb(255, 0, 255), 0 -5px 15px rgba(255, 0, 255),
@@ -57,4 +60,8 @@
 
 .game_cell.no-hover {
   pointer-events: none;
+}
+
+.winning-line {
+  border-radius: 1rem;
 }

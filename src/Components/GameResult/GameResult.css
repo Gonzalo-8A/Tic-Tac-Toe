@@ -43,3 +43,31 @@
   min-width: 145px;
   width: 50%;
 }
+
+.winning-line {
+  position: absolute;
+}
+
+@keyframes draw-line-horizontal {
+  to {
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
+@keyframes draw-line-vertical {
+  to {
+    transform: translateY(-50%) scaleX(1);
+  }
+}
+
+@keyframes draw-line-diagonal {
+  to {
+    transform: translate(-50%, -50%) rotate(45deg) scaleX(1);
+  }
+}
+
+@keyframes draw-line-diagonal-inv {
+  to {
+    transform: translate(-50%, -50%) rotate(-45deg) scaleX(1);
+  }
+}

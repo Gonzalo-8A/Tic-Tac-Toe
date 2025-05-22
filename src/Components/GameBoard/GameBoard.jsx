@@ -1,7 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import PlayersTurn from '../PlayerTurn/PlayersTurn.jsx';
 import GameResult from '../GameResult/GameResult.jsx';
-import { checkWinner, getAIMove } from '../../../gameLogic.js';
+import {
+  checkWinner,
+  getWinningLineStyle,
+  getAIMove,
+} from '../../../gameLogic.js';
 
 import './GameBoard.css';
 
@@ -9,6 +13,8 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(1);
   const [winner, setWinner] = useState(null);
+  const [winningLine, setWinningLine] = useState(null);
+  const [showResult, setShowResult] = useState(false);
 
   const handleBoardChange = useCallback(
     (index) => {
@@ -18,10 +24,12 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
       newBoard[index] = playersInfo[turn].symbol;
       setBoard(newBoard);
 
-      checkWinner(index, newBoard, setWinner);
+      const result = checkWinner(index, newBoard, setWinner, setWinningLine);
 
-      const newTurn = turn === 1 ? 2 : 1;
-      setTurn(newTurn);
+      if (!result) {
+        const newTurn = turn === 1 ? 2 : 1;
+        setTurn(newTurn);
+      }
     },
     [board, winner, playersInfo, turn]
   );
@@ -34,7 +42,11 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
   useEffect(() => {
     if (isSinglePlayer && turn === 2 && !winner) {
       const timeoutId = setTimeout(() => {
-        const aiMoveIndex = getAIMove(board, playersInfo[2].symbol, playersInfo[1].symbol);
+        const aiMoveIndex = getAIMove(
+          board,
+          playersInfo[2].symbol,
+          playersInfo[1].symbol
+        );
         handleBoardChange(aiMoveIndex);
       }, 800);
 
@@ -42,28 +54,62 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
     }
   }, [turn, isSinglePlayer, winner, board, handleBoardChange, playersInfo]);
 
+  useEffect(() => {
+    if (winner && winner !== false) {
+      const timeout = setTimeout(() => {
+        setShowResult(true);
+      }, 1300);
+
+      return () => clearTimeout(timeout);
+    } else if (winner === false) {
+      const timeout = setTimeout(() => {
+        setShowResult(true);
+      }, 300);
+
+      return () => clearTimeout(timeout);
+    } else {
+      setShowResult(false);
+    }
+  }, [winner]);
+
   function resetGame() {
+    setShowResult(false)
     setBoard(Array(9).fill(null));
-    const randomTurn = Math.random() < 0.5 ? 1 : 2
+    const randomTurn = Math.random() < 0.5 ? 1 : 2;
     setTurn(randomTurn);
     setWinner(null);
+    setWinningLine(null);
   }
 
   return (
     <>
       <PlayersTurn winner={winner} turn={turn} playersInfo={playersInfo} />
-      <section id="game-board" className={`game-board ${winner !== null ? 'blur' : ''}`}>
+      <section
+        id="game-board"
+        className={`game-board ${showResult !== false ? 'blur' : ''}`}
+      >
+        {winner && winningLine && (
+          <div
+            className="winning-line"
+            style={{
+              backgroundColor: turn === 1 ? '#3949ab' : '#c2185b',
+              ...getWinningLineStyle(winningLine),
+            }}
+          ></div>
+        )}
         {board.map((cell, index) => (
           <div
-            className={`game_cell ${cell ? 'filled' : ''} ${winner ? 'no-hover' : ''}`}
+            className={`game_cell ${cell ? 'filled' : ''} ${
+              winner ? 'no-hover' : ''
+            }`}
             onClick={() => handleBoardChange(index)}
             key={`cell ${index}`}
           >
-            <span className="cell_content">{cell}</span>
+            <span className="cell-content">{cell}</span>
           </div>
         ))}
       </section>
-      {winner !== null && (
+      {showResult && (
         <GameResult
           turn={turn}
           winner={winner}

@@ -30,23 +30,45 @@ export function getWinningLines(board) {
     return winningCols;
   };
 
-  const getWinningDiag = () => Array.from({ length: gameSize }, (_, i) => i * (gameSize + 1));
+  const getWinningDiag = () =>
+    Array.from({ length: gameSize }, (_, i) => i * (gameSize + 1));
 
   const getWinningDiagInv = () =>
     Array.from({ length: gameSize }, (_, i) => (i + 1) * (gameSize - 1));
 
-  return [...getWinningRows(), ...getWinningCols(), getWinningDiag(), getWinningDiagInv()];
+  return [
+    ...getWinningRows(),
+    ...getWinningCols(),
+    getWinningDiag(),
+    getWinningDiagInv(),
+  ];
 }
 
 const winningLines = getWinningLines(Array(9).fill(null));
 
-export function checkWinner(index, newBoard, setWinner) {
-  const possibleWinningLines = winningLines.filter((line) => line.includes(index));
+export function checkWinner(index, newBoard, setWinner, setWinningLine) {
+  const possibleWinningLines = winningLines.filter((line) =>
+    line.includes(index)
+  );
   for (const line of possibleWinningLines) {
     const [a, b, c] = line;
-    if (newBoard[a] && newBoard[a] === newBoard[b] && newBoard[a] === newBoard[c]) {
-      confetti({ particleCount: 100, spread: 70 });
+    if (
+      newBoard[a] &&
+      newBoard[a] === newBoard[b] &&
+      newBoard[a] === newBoard[c]
+    ) {
+      confetti({
+        particleCount: 150,
+        spread: 120,
+        startVelocity: 45,
+        gravity: 0.8,
+        scalar: 1.2,
+        ticks: 300,
+        origin: { x: 0.5, y: 0.7 },
+        colors: ['#ff0040', '#00e5ff', '#ffea00', '#ffffff'],
+      });
       setWinner(newBoard[a]);
+      setWinningLine(line);
       return newBoard[a];
     }
   }
@@ -57,6 +79,111 @@ export function checkWinner(index, newBoard, setWinner) {
   }
 
   return null;
+}
+
+export function getWinningLineStyle(line) {
+  function arraysEqual(a, b) {
+    return a.length === b.length && a.every((val, i) => val === b[i]);
+  }
+  const [a, b, c] = line;
+
+  // Horizontal lines
+  if (arraysEqual(line, [0, 1, 2])) {
+    return {
+      top: '11.33%',
+      left: '50%',
+      width: '110%',
+      height: '4%',
+      transform: 'translateX(-50%) scaleX(0)',
+      transformOrigin: 'left center',
+      animation: 'draw-line-horizontal 0.8s ease-out forwards',
+    };
+  }
+  if (arraysEqual(line, [3, 4, 5])) {
+    return {
+      top: '48%',
+      left: '50%',
+      width: '110%',
+      height: '4%',
+      transform: 'translateX(-50%) scaleX(0)',
+      transformOrigin: 'left center',
+      animation: 'draw-line-horizontal 0.8s ease-out forwards',
+    };
+  }
+  if (arraysEqual(line, [6, 7, 8])) {
+    return {
+      top: '83.33%',
+      left: '50%',
+      width: '110%',
+      height: '4%',
+      transform: 'translateX(-50%) scaleX(0)',
+      transformOrigin: 'left center',
+      animation: 'draw-line-horizontal 0.8s ease-out forwards',
+    };
+  }
+
+  // Vertical lines
+  if (arraysEqual(line, [0, 3, 6])) {
+    return {
+      top: '50%',
+      left: '11.33%',
+      width: '4%',
+      height: '110%',
+      transform: 'translateY(-50%) scaleY(0)',
+      transformOrigin: 'center top',
+      animation: 'draw-line-vertical 0.8s ease-out forwards',
+    };
+  }
+  if (arraysEqual(line, [1, 4, 7])) {
+    return {
+      top: '50%',
+      left: '48%',
+      width: '4%',
+      height: '110%',
+      transform: 'translateY(-50%) scaleY(0)',
+      transformOrigin: 'center top',
+      animation: 'draw-line-vertical 0.8s ease-out forwards',
+    };
+  }
+  if (arraysEqual(line, [2, 5, 8])) {
+    return {
+      top: '50%',
+      left: '85.33%',
+      width: '4%',
+      height: '110%',
+      transform: 'translateY(-50%) scaleY(0)',
+      transformOrigin: 'center top',
+      animation: 'draw-line-vertical 0.8s ease-out forwards',
+    };
+  }
+
+  // Diagonal ↘︎
+  if (a === 0 && b === 4 && c === 8) {
+    return {
+      top: '50%',
+      left: '50%',
+      width: '150%',
+      height: '4%',
+      transform: 'translate(-50%, -50%) rotate(45deg) scaleX(0)',
+      transformOrigin: 'center',
+      animation: 'draw-line-diagonal 0.8s ease-out forwards',
+    };
+  }
+
+  // Diagonal ↙︎
+  if (a === 2 && b === 4 && c === 6) {
+    return {
+      top: '50%',
+      left: '50%',
+      width: '150%',
+      height: '4%',
+      transform: 'translate(-50%, -50%) rotate(-45deg) scaleX(0)',
+      transformOrigin: 'center',
+      animation: 'draw-line-diagonal-inv 0.8s ease-out forwards',
+    };
+  }
+
+  return {}; // fallback
 }
 
 function randomNum(array) {
@@ -104,7 +231,9 @@ function checkFork(board, checkingSymbol, playersSymbol) {
     });
   });
 
-  const forkIndex = Object.keys(emptyForkSpots).find((index) => emptyForkSpots[index] >= 2);
+  const forkIndex = Object.keys(emptyForkSpots).find(
+    (index) => emptyForkSpots[index] >= 2
+  );
 
   return forkIndex ? parseInt(forkIndex) : null;
 }
@@ -157,15 +286,19 @@ function goWin(board, playersSymbol, aiSymbol) {
   } else {
     const rivalFork = checkFork(board, playersSymbol, aiSymbol);
     if (rivalFork) {
-      const filteredOffensiveIndexes = uniqueOffensiveIndexes.filter((offensiveIndex) => {
-        return !winningLines.some((line) => {
-          if (line.includes(offensiveIndex) && line.includes(rivalFork)) {
-            const thirdIndex = line.find((i) => i !== offensiveIndex && i !== rivalFork);
-            return board[thirdIndex] === aiSymbol;
-          }
-          return false;
-        });
-      });
+      const filteredOffensiveIndexes = uniqueOffensiveIndexes.filter(
+        (offensiveIndex) => {
+          return !winningLines.some((line) => {
+            if (line.includes(offensiveIndex) && line.includes(rivalFork)) {
+              const thirdIndex = line.find(
+                (i) => i !== offensiveIndex && i !== rivalFork
+              );
+              return board[thirdIndex] === aiSymbol;
+            }
+            return false;
+          });
+        }
+      );
       const randomIndex = randomNum(filteredOffensiveIndexes);
       return filteredOffensiveIndexes[randomIndex];
     }
@@ -221,7 +354,6 @@ function getLastMove(board, aiSymbol) {
 }
 
 export function getAIMove(board, aiSymbol, playersSymbol) {
-
   const winningMove = checkWinningMove(board, aiSymbol);
   if (winningMove !== null) return winningMove;
 
