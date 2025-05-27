@@ -32,7 +32,7 @@ function App() {
   const [stepIndex, setStepIndex] = useState(0);
   const [playersInfo, setPlayersInfo] = useState(initialPlayersInfo);
   const [isSinglePlayer, setIsSinglePlayer] = useState(false);
-  const [difficulty, setDifficulty] = useState('easy');
+  const [difficulty, setDifficulty] = useState('default');
   const [winner, setWinner] = useState(null);
 
   const gameStep = steps[stepIndex];
@@ -209,12 +209,21 @@ function App() {
                   difficulty={difficulty}
                   winner={winner}
                   setWinner={setWinner}
+                  setDifficulty={setDifficulty}
                 />
               </StepContainer>
             )}
           </div>
+        </AnimatePresence>
+        <AnimatePresence>
           {gameStep === 'gameBoard' && (
-            <GameCount playersInfo={playersInfo} winner={winner} difficulty={difficulty}/>
+            <StepContainer id="gameCountContainer">
+              <GameCount
+                playersInfo={playersInfo}
+                winner={winner}
+                difficulty={difficulty}
+              />
+            </StepContainer>
           )}
         </AnimatePresence>
       </main>

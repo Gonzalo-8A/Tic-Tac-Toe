@@ -9,7 +9,7 @@ import {
 
 import './GameBoard.css';
 
-export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSinglePlayer, difficulty, winner, setWinner }) {
+export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSinglePlayer, difficulty, setDifficulty, winner, setWinner }) {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(1);
   
@@ -85,6 +85,7 @@ export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSing
     setTurn(randomTurn);
     setWinner(null);
     setWinningLine(null);
+    setDifficulty("default")
   }
 
   return (

@@ -10,6 +10,7 @@ export default function GameCount({ playersInfo, winner, difficulty }) {
     return saved
       ? JSON.parse(saved)
       : {
+          default: defaultCount,
           easy: defaultCount,
           normal: defaultCount,
           hard: defaultCount,
@@ -48,10 +49,15 @@ export default function GameCount({ playersInfo, winner, difficulty }) {
   }
 
   const currentCount = gameCount[difficulty] || defaultCount;
+  const difficultyString = {
+    easy: "Fácil",
+    normal: "Normal",
+    hard: "Difícil"
+  }
 
   return (
     <div className="result-count-container">
-      <h2>{`Dificultad: ${difficulty}`}</h2>
+      {difficulty !== "default" && <h2>{`Dificultad: ${difficultyString[difficulty]}`}</h2>}
       <div className="result-count">
         <p>{`${playersInfo[1].name} ${playersInfo[1].symbol}`}</p>
         <span>{currentCount[1]}</span>

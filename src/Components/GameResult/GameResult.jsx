@@ -33,7 +33,13 @@ export default function GameResult({
       </h2>
       <div className="result-btn-container">
         <div className="double-btn-container">
-          <Button id="go-to-start-btn" onClick={goToStart}>
+          <Button
+            id="go-to-start-btn"
+            onClick={() => {
+              resetGame();
+              goToStart();
+            }}
+          >
             Inicio
           </Button>
           <Button id="reset-btn" onClick={resetGame}>
