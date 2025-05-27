@@ -72,12 +72,6 @@ main {
   position: relative;
 }
 
-@media (max-width: 630px) {
-  .game-container {
-    margin: 0;
-  }
-}
-
 #playersContainer {
   list-style: none;
   padding: 0;

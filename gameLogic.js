@@ -43,7 +43,6 @@ export function getWinningLines(board) {
     getWinningDiagInv(),
   ];
 }
-
 const winningLines = getWinningLines(Array(9).fill(null));
 
 export function checkWinner(index, newBoard, setWinner, setWinningLine) {

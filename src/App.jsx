@@ -5,8 +5,9 @@ import Player from './Components/Player/Player.jsx';
 import GameBoard from './Components/GameBoard/GameBoard.jsx';
 import Button from './Components/Button/Button.jsx';
 import Header from './Components/Header/Header.jsx';
-import './App.css';
+import GameCount from './Components/GameCount/Gamecount.jsx';
 import StepContainer from './Components/StepContainer/StepContainer.jsx';
+import './App.css';
 
 const steps = [
   'start',
@@ -32,6 +33,7 @@ function App() {
   const [playersInfo, setPlayersInfo] = useState(initialPlayersInfo);
   const [isSinglePlayer, setIsSinglePlayer] = useState(false);
   const [difficulty, setDifficulty] = useState('easy');
+  const [winner, setWinner] = useState(null);
 
   const gameStep = steps[stepIndex];
 
@@ -41,10 +43,10 @@ function App() {
 
   function goToPrevStep() {
     if (gameStep === 'gameBoard') {
-      setStepIndex(2)
-      return
+      setStepIndex(2);
+      return;
     }
-    
+
     setStepIndex((prev) => Math.max(prev - (isSinglePlayer ? 1 : 2), 0));
 
     if (gameStep === 'difficultySelection') {
@@ -187,7 +189,12 @@ function App() {
 
             {(gameStep === 'playerSetup' ||
               gameStep === 'difficultySelection') && (
-              <Button styles={'back'} onClick={() => {goToPrevStep()}}>
+              <Button
+                styles={'back'}
+                onClick={() => {
+                  goToPrevStep();
+                }}
+              >
                 Atrás
               </Button>
             )}
@@ -200,10 +207,15 @@ function App() {
                   playersInfo={playersInfo}
                   isSinglePlayer={isSinglePlayer}
                   difficulty={difficulty}
+                  winner={winner}
+                  setWinner={setWinner}
                 />
               </StepContainer>
             )}
           </div>
+          {gameStep === 'gameBoard' && (
+            <GameCount playersInfo={playersInfo} winner={winner} difficulty={difficulty}/>
+          )}
         </AnimatePresence>
       </main>
     </>

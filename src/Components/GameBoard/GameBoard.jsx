@@ -9,10 +9,10 @@ import {
 
 import './GameBoard.css';
 
-export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSinglePlayer, difficulty }) {
+export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSinglePlayer, difficulty, winner, setWinner }) {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(1);
-  const [winner, setWinner] = useState(null);
+  
   const [winningLine, setWinningLine] = useState(null);
   const [showResult, setShowResult] = useState(false);
 
@@ -31,7 +31,7 @@ export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSing
         setTurn(newTurn);
       }
     },
-    [board, winner, playersInfo, turn]
+    [board, winner, playersInfo, turn, setWinner]
   );
 
   useEffect(() => {
