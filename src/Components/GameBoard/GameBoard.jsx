@@ -9,7 +9,7 @@ import {
 
 import './GameBoard.css';
 
-export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
+export default function GameBoard({ goToStart, playersInfo, isSinglePlayer, difficulty }) {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(1);
   const [winner, setWinner] = useState(null);
@@ -40,19 +40,20 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer }) {
   }, []);
 
   useEffect(() => {
-    if (isSinglePlayer && turn === 2 && !winner) {
+    if (isSinglePlayer && turn === 2 && winner === null) {
       const timeoutId = setTimeout(() => {
         const aiMoveIndex = getAIMove(
           board,
           playersInfo[2].symbol,
-          playersInfo[1].symbol
+          playersInfo[1].symbol,
+          difficulty
         );
         handleBoardChange(aiMoveIndex);
       }, 800);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [turn, isSinglePlayer, winner, board, handleBoardChange, playersInfo]);
+  }, [turn, isSinglePlayer, winner, board, handleBoardChange, playersInfo, difficulty]);
 
   useEffect(() => {
     if (winner && winner !== false) {

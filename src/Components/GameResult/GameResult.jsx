@@ -20,7 +20,7 @@ export default function GameResult({ winner, playersInfo, resetGame, goToStart }
       variants={resultVariants}
     >
       <h2 className="result-message">
-        {winner !== false ? `El ganador es ${winnerPlayer?.name} ${winnerPlayer?.symbol}` : "!Empate!"}
+        {winner !== false ? `El ganador es ${winnerPlayer?.name} ${winnerPlayer?.symbol}` : "¡ Empate !"}
       </h2>
       <div className="result-btn-container">
         <Button id="go-to-start-btn" onClick={goToStart}>

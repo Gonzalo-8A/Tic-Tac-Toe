@@ -190,6 +190,88 @@ function randomNum(array) {
   return Math.floor(Math.random() * array.length);
 }
 
+function getOffensiveMoves(board, aiSymbol) {
+  let offensiveIndexes = [];
+
+  for (const line of winningLines) {
+    const lineIndexs = [...line];
+
+    let symbolCount = 0;
+    let nullCount = 0;
+    let targetIndex = [];
+
+    lineIndexs.forEach((index) => {
+      const value = board[index];
+      if (value === aiSymbol) {
+        symbolCount++;
+      } else if (value === null) {
+        nullCount++;
+        targetIndex.push(index);
+      }
+    });
+
+    if (symbolCount === 1 && nullCount === 2) {
+      offensiveIndexes.push(...targetIndex);
+    }
+  }
+
+  return [...new Set(offensiveIndexes)];
+}
+
+function getCorner(board) {
+  const cornersArray = [0, 2, 6, 8];
+
+  const cornerOption = cornersArray.filter((i) => board[i] === null);
+  if (cornerOption.length !== 0) {
+    const randomIndex = randomNum(cornerOption);
+    console.log('Go corner');
+    return cornerOption[randomIndex];
+  }
+  return null;
+}
+
+function checkAggresiveOpen(board) {
+  const oppositeCorners = {
+    0: 8,
+    2: 6,
+    6: 2,
+    8: 0,
+  };
+
+  for (const xCorner of [0, 2, 6, 8]) {
+    const oCorner = oppositeCorners[xCorner];
+
+    if (
+      board[xCorner] === '✖️' &&
+      board[4] === '✖️' &&
+      board[oCorner] === '⭕'
+    ) {
+      const used = new Set([xCorner, 4, oCorner]);
+
+      const restAreNull = board.every((cell, i) => {
+        return used.has(i) || cell === null;
+      });
+
+      if (restAreNull) {
+        return oCorner;
+      }
+    }
+  }
+
+  return null;
+}
+
+function randomMove(board) {
+  const indexOptions = board.reduce((acc, cell, index) => {
+    if (cell === null) acc.push(index);
+    return acc;
+  }, []);
+  console.log('Random Move');
+  return indexOptions[randomNum(indexOptions)];
+}
+
+//AI Moves
+
 function checkWinningMove(board, checkingSymbol) {
   for (const line of winningLines) {
     const lineIndexs = [...line];
@@ -215,7 +297,8 @@ function checkWinningMove(board, checkingSymbol) {
   return null;
 }
 
-function checkFork(board, checkingSymbol, opponentSymbol) {
+function checkFork(board, checkingSymbol, opponentSymbol, difficulty) {
+  if (difficulty === 'easy') return null;
   const forkSpots = {};
 
   board.forEach((cell, index) => {
@@ -253,17 +336,79 @@ function checkFork(board, checkingSymbol, opponentSymbol) {
 
 function offensiveStart(board, aiSymbol, playersSymbol) {
   if (board.every((el) => el === null)) {
-    return 0;
+    const openningType = randomNum([0, 1]);
+    if (openningType === 0) {
+      return getCenter(board);
+    } else {
+      return getCorner(board);
+    }
   }
-  if (
-    board[0] === aiSymbol &&
-    board[4] === playersSymbol &&
-    board[8] === null
-  ) {
-    return 8;
-  } else {
-    return null;
+
+  if (board.filter((cell) => cell === null).length === 7) {
+    const aiMove = board
+      .map((val, idx) => (val === aiSymbol ? idx : null))
+      .filter((v) => v !== null);
+
+    const playerMove = board
+      .map((val, idx) => (val === playersSymbol ? idx : null))
+      .filter((v) => v !== null);
+
+    //Primer movimiento fue al centro
+    if (
+      aiMove.includes(4) &&
+      playerMove.some((pos) => [0, 2, 6, 8].includes(pos))
+    ) {
+      const opposites = {
+        0: 8,
+        2: 6,
+        6: 2,
+        8: 0,
+      };
+      return opposites[playerMove[0]];
+    }
+
+    if (
+      aiMove.includes(4) &&
+      playerMove.some((pos) => [1, 3, 5, 7].includes(pos))
+    ) {
+      const opposites = {
+        1: [6, 8],
+        3: [2, 8],
+        5: [0, 6],
+        7: [0, 2],
+      };
+      return opposites[playerMove[0]][randomNum([0, 1])];
+    }
+
+    //Primer movimiento fue a una esquina
+    if (
+      aiMove.some((pos) => [0, 2, 6, 8].includes(pos)) &&
+      playerMove.includes(4)
+    ) {
+      const opposites = {
+        0: 8,
+        2: 6,
+        6: 2,
+        8: 0,
+      };
+      return opposites[aiMove[0]];
+    }
+
+    if (
+      aiMove.some((pos) => [0, 2, 6, 8].includes(pos)) &&
+      playerMove.some((pos) => [1, 3, 5, 7].includes(pos))
+    ) {
+      return getCenter(board);
+    }
+
+    if (
+      aiMove.some((pos) => [0, 2, 6, 8].includes(pos)) &&
+      playerMove.some((pos) => [0, 2, 6, 8].includes(pos))
+    ) {
+      return getCorner(board);
+    }
   }
+  return null;
 }
 
 function getCenter(board) {
@@ -274,105 +419,46 @@ function getCenter(board) {
   }
 }
 
-function goWin(board, playersSymbol, aiSymbol) {
-  let offensiveIndexes = [];
-
-  for (const line of winningLines) {
-    const lineIndexs = [...line];
-
-    let symbolCount = 0;
-    let nullCount = 0;
-    let targetIndex = [];
-
-    lineIndexs.forEach((index) => {
-      const value = board[index];
-      if (value === aiSymbol) {
-        symbolCount++;
-      } else if (value === null) {
-        nullCount++;
-        targetIndex.push(index);
-      }
-    });
-
-    if (symbolCount === 1 && nullCount === 2) {
-      offensiveIndexes.push(...targetIndex);
-    }
-  }
-
+function goWin(board, playersSymbol, aiSymbol, difficulty) {
+  const offensiveIndexes = getOffensiveMoves(board, aiSymbol);
   if (offensiveIndexes.length === 0) return null;
 
-  const uniqueOffensiveIndexes = [...new Set(offensiveIndexes)];
-
-  if (
+  const playerHasDiagonalCorners =
     (board[0] === playersSymbol && board[8] === playersSymbol) ||
-    (board[2] === playersSymbol && board[6] === playersSymbol)
-  ) {
+    (board[2] === playersSymbol && board[6] === playersSymbol);
+
+  if (playerHasDiagonalCorners) {
     const posibleMoves = [1, 3, 5, 7].filter((i) => board[i] === null);
     const randomIndex = randomNum(posibleMoves);
     console.log(`Go sides ${posibleMoves} ${posibleMoves[randomIndex]}`);
     return posibleMoves[randomIndex];
   }
 
-  //Skip in Easy and Normal difficulty
-  function checkAggresiveOpen(board) {
-    const oppositeCorners = {
-      0: 8,
-      2: 6,
-      6: 2,
-      8: 0,
-    };
+  if (difficulty === 'hard') {
+    const oCorner = checkAggresiveOpen(board);
+    if (oCorner) {
+      const sides = {
+        0: [1, 3],
+        2: [1, 5],
+        6: [3, 7],
+        8: [5, 7],
+      };
 
-    for (const xCorner of [0, 2, 6, 8]) {
-      const oCorner = oppositeCorners[xCorner];
+      const sidesToRemove = sides[oCorner];
 
-      if (
-        board[xCorner] === '✖️' &&
-        board[4] === '✖️' &&
-        board[oCorner] === '⭕'
-      ) {
-        const used = new Set([xCorner, 4, oCorner]);
+      const filteredOptions = offensiveIndexes.filter(
+        (index) => !sidesToRemove.includes(index)
+      );
 
-        const restAreNull = board.every((cell, i) => {
-          return used.has(i) || cell === null;
-        });
-
-        if (restAreNull) {
-          return oCorner;
-        }
-      }
+      const randomIndex = randomNum(filteredOptions);
+      console.log('Block Forks');
+      return filteredOptions[randomIndex];
     }
 
-    return null;
-  }
-
-  const oCorner = checkAggresiveOpen(board);
-  if (oCorner) {
-    
-    const sides = {
-      0: [1, 3],
-      2: [1, 5],
-      6: [3, 7],
-      8: [5, 7],
-    };
-
-    const sidesToRemove = sides[oCorner];
-
-    const filteredOptions = uniqueOffensiveIndexes.filter(
-      (index) => !sidesToRemove.includes(index)
-    );
-
-    const randomIndex = randomNum(filteredOptions);
-    return filteredOptions[randomIndex];
-  } else {
     const rivalFork = checkFork(board, playersSymbol, aiSymbol);
     if (rivalFork) {
-      console.log(
-        'rivalFork:',
-        rivalFork,
-        'My options:',
-        uniqueOffensiveIndexes
-      );
-      const filteredOffensiveIndexes = uniqueOffensiveIndexes.filter(
+      console.log('rivalFork:', rivalFork, 'My options:', offensiveIndexes);
+      const filteredOffensiveIndexes = offensiveIndexes.filter(
         (offensiveIndex) => {
           return !winningLines.some((line) => {
             if (line.includes(offensiveIndex) && line.includes(rivalFork)) {
@@ -393,60 +479,25 @@ function goWin(board, playersSymbol, aiSymbol) {
       return filteredOffensiveIndexes[randomIndex];
     }
   }
-  return null;
+  const randomIndex = randomNum(offensiveIndexes);
+  console.log(`Go offensive ${offensiveIndexes[randomIndex]}`);
+  return offensiveIndexes[randomIndex];
 }
 
-function getLastMove(board, aiSymbol) {
-  const cornersArray = [0, 2, 6, 8];
-
-  if (cornersArray.every((i) => board[i] === null)) {
-    const randomIndex = randomNum(cornersArray);
-    console.log('Go corner');
-    return cornersArray[randomIndex];
+function getLastMove(board, difficulty) {
+  //Check for Corners
+  if (difficulty !== 'easy') {
+    const cornerMove = getCorner(board);
+    if (cornerMove !== null) return cornerMove;
   }
 
-  let offensiveIndexes = [];
-
-  for (const line of winningLines) {
-    const lineIndexs = [...line];
-
-    let symbolCount = 0;
-    let nullCount = 0;
-    let targetIndex = [];
-
-    lineIndexs.forEach((index) => {
-      const value = board[index];
-      if (value === aiSymbol) {
-        symbolCount++;
-      } else if (value === null) {
-        nullCount++;
-        targetIndex.push(index);
-      }
-    });
-
-    if (symbolCount === 1 && nullCount === 2) {
-      offensiveIndexes.push(...targetIndex);
-    }
-  }
-
-  const uniqueOffensiveIndexes = [...new Set(offensiveIndexes)];
-
-  if (uniqueOffensiveIndexes.length !== 0) {
-    const randomIndex = randomNum(uniqueOffensiveIndexes);
-    console.log(`Go offensive ${uniqueOffensiveIndexes[randomIndex]}`);
-    return uniqueOffensiveIndexes[randomIndex];
-  } else {
-    const indexOptions = board
-      .map((cell, index) => (cell === null ? index : null))
-      .filter((index) => index !== null);
-
-    const randomIndex = randomNum(indexOptions);
-    console.log('LastMove');
-    return indexOptions[randomIndex];
-  }
+  //Return Last Move
+  return randomMove(board);
 }
 
-export function getAIMove(board, aiSymbol, playersSymbol) {
+//AI Function
+
+export function getAIMove(board, aiSymbol, playersSymbol, difficulty) {
   const winningMove = checkWinningMove(board, aiSymbol);
   console.log('winningMove llamado. Resultado: ', winningMove);
   if (winningMove !== null) return winningMove;
@@ -455,23 +506,29 @@ export function getAIMove(board, aiSymbol, playersSymbol) {
   console.log('blockingMove llamado. Resultado: ', blockingMove);
   if (blockingMove !== null) return blockingMove;
 
-  const goOffensive = offensiveStart(board, aiSymbol, playersSymbol);
-  console.log('goOffensive llamado. Resultado: ', goOffensive);
-  if (goOffensive !== null) return goOffensive;
+  if (difficulty !== 'easy') {
+    const goOffensive = offensiveStart(board, aiSymbol, playersSymbol);
+    console.log('goOffensive llamado. Resultado: ', goOffensive);
+    if (goOffensive !== null) return goOffensive;
+  }
 
   const getCenterMove = getCenter(board);
   console.log('getCenterMove llamado. Resultado: ', getCenterMove);
   if (getCenterMove !== null) return getCenterMove;
 
-  const forkMove = checkFork(board, aiSymbol, playersSymbol);
-  console.log('forkMove llamado. Resultado: ', forkMove);
-  if (forkMove !== null) return forkMove;
+  if (difficulty !== 'easy') {
+    const forkMove = checkFork(board, aiSymbol, playersSymbol, difficulty);
+    console.log('forkMove llamado. Resultado: ', forkMove);
+    if (forkMove !== null) return forkMove;
+  }
 
-  const winMove = goWin(board, playersSymbol, aiSymbol);
-  console.log('winMove llamado. Resultado: ', winMove);
-  if (winMove !== null) return winMove;
+  if (difficulty !== 'easy') {
+    const winMove = goWin(board, playersSymbol, aiSymbol, difficulty);
+    console.log('winMove llamado. Resultado: ', winMove);
+    if (winMove !== null) return winMove;
+  }
 
-  const lastMove = getLastMove(board, aiSymbol);
+  const lastMove = getLastMove(board, difficulty);
   console.log('lastMove llamado. Resultado: ', lastMove);
   if (lastMove !== null) return lastMove;
 }
