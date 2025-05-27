@@ -2,7 +2,7 @@ import Button from "../Button/Button.jsx";
 import StepContainer from "../StepContainer/StepContainer.jsx";
 import "./GameResult.css";
 
-export default function GameResult({ winner, playersInfo, resetGame, goToStart }) {
+export default function GameResult({ winner, playersInfo, isSinglePlayer ,resetGame, goToStart, goToPrevStep }) {
   const resultVariants = {
     hidden: { opacity: 0, transform: "translate(-50%, -40%) translateY(20px)" },
     visible: { opacity: 1, transform: "translate(-50%, -50%) translateY(0)" },
@@ -23,12 +23,17 @@ export default function GameResult({ winner, playersInfo, resetGame, goToStart }
         {winner !== false ? `El ganador es ${winnerPlayer?.name} ${winnerPlayer?.symbol}` : "¡ Empate !"}
       </h2>
       <div className="result-btn-container">
-        <Button id="go-to-start-btn" onClick={goToStart}>
-          Inicio
-        </Button>
-        <Button id="reset-btn" onClick={resetGame}>
-          Reiniciar
-        </Button>
+        <div className="double-btn-container">
+          <Button id="go-to-start-btn" onClick={goToStart}>
+            Inicio
+          </Button>
+          <Button id="reset-btn" onClick={resetGame}>
+            Reiniciar
+          </Button>
+        </div>
+        {isSinglePlayer && <Button id="difficulty-btn" onClick={goToPrevStep}>
+          Cambiar dificultad
+        </Button>}
       </div>
     </StepContainer>
   );

@@ -9,7 +9,7 @@ import {
 
 import './GameBoard.css';
 
-export default function GameBoard({ goToStart, playersInfo, isSinglePlayer, difficulty }) {
+export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSinglePlayer, difficulty }) {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(1);
   const [winner, setWinner] = useState(null);
@@ -120,8 +120,10 @@ export default function GameBoard({ goToStart, playersInfo, isSinglePlayer, diff
           turn={turn}
           winner={winner}
           playersInfo={playersInfo}
+          isSinglePlayer={isSinglePlayer}
           goToStart={goToStart}
           resetGame={resetGame}
+          goToPrevStep={goToPrevStep}
         />
       )}
     </>

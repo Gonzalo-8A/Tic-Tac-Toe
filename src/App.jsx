@@ -40,6 +40,11 @@ function App() {
   }
 
   function goToPrevStep() {
+    if (gameStep === 'gameBoard') {
+      setStepIndex(2)
+      return
+    }
+    
     setStepIndex((prev) => Math.max(prev - (isSinglePlayer ? 1 : 2), 0));
 
     if (gameStep === 'difficultySelection') {
@@ -191,6 +196,7 @@ function App() {
               <StepContainer id="gameBoardContainer">
                 <GameBoard
                   goToStart={goToStart}
+                  goToPrevStep={goToPrevStep}
                   playersInfo={playersInfo}
                   isSinglePlayer={isSinglePlayer}
                   difficulty={difficulty}
