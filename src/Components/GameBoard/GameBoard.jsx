@@ -1,43 +1,34 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import PlayersTurn from '../PlayerTurn/PlayersTurn.jsx';
 import GameResult from '../GameResult/GameResult.jsx';
-import {
-  checkWinner,
-  getWinningLineStyle,
-  getAIMove,
-} from '../../../gameLogic.js';
+import { getWinningLineStyle, getAIMove } from '../../../gameLogic.js';
 
 import './GameBoard.css';
 
-export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSinglePlayer, difficulty, setDifficulty, winner, setWinner }) {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [turn, setTurn] = useState(1);
-  
-  const [winningLine, setWinningLine] = useState(null);
-  const [showResult, setShowResult] = useState(false);
-
-  const handleBoardChange = useCallback(
-    (index) => {
-      if (board[index] || winner) return;
-
-      const newBoard = [...board];
-      newBoard[index] = playersInfo[turn].symbol;
-      setBoard(newBoard);
-
-      const result = checkWinner(index, newBoard, setWinner, setWinningLine);
-
-      if (!result) {
-        const newTurn = turn === 1 ? 2 : 1;
-        setTurn(newTurn);
-      }
-    },
-    [board, winner, playersInfo, turn, setWinner]
-  );
+export default function GameBoard({ game }) {
+  //Bring all props from useGameLogic
+  const {
+    board,
+    turn,
+    setTurn,
+    isSinglePlayer,
+    playersInfo,
+    difficulty,
+    handleBoardChange,
+    goToStart,
+    goToPrevStep,
+    handleClick,
+    resetGame,
+    winner,
+    winningLine,
+    setShowResult,
+    showResult,
+  } = game;
 
   useEffect(() => {
     const randomTurn = Math.random() < 0.5 ? 1 : 2;
     setTurn(randomTurn);
-  }, []);
+  }, [setTurn]);
 
   useEffect(() => {
     if (isSinglePlayer && turn === 2 && winner === null) {
@@ -53,7 +44,15 @@ export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSing
 
       return () => clearTimeout(timeoutId);
     }
-  }, [turn, isSinglePlayer, winner, board, handleBoardChange, playersInfo, difficulty]);
+  }, [
+    turn,
+    isSinglePlayer,
+    winner,
+    board,
+    handleBoardChange,
+    playersInfo,
+    difficulty,
+  ]);
 
   useEffect(() => {
     if (winner && winner !== false) {
@@ -71,22 +70,7 @@ export default function GameBoard({ goToStart, goToPrevStep ,playersInfo, isSing
     } else {
       setShowResult(false);
     }
-  }, [winner]);
-
-  function handleClick(index) {
-    if(isSinglePlayer && turn === 2) return;
-    handleBoardChange(index)
-  }
-
-  function resetGame() {
-    setShowResult(false)
-    setBoard(Array(9).fill(null));
-    const randomTurn = Math.random() < 0.5 ? 1 : 2;
-    setTurn(randomTurn);
-    setWinner(null);
-    setWinningLine(null);
-    setDifficulty("default")
-  }
+  }, [winner, setShowResult]);
 
   return (
     <>

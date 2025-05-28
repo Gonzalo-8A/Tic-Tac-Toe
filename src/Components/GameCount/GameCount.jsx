@@ -3,25 +3,25 @@ import Button from '../Button/Button.jsx';
 import './GameCount.css';
 
 export default function GameCount({ playersInfo, winner, difficulty }) {
-  const defaultCount = { 1: 0, 0: 0, 2: 0 };
+  const createInitialCount = () => ({
+    default: { 1: 0, 0: 0, 2: 0 },
+    easy: { 1: 0, 0: 0, 2: 0 },
+    normal: { 1: 0, 0: 0, 2: 0 },
+    hard: { 1: 0, 0: 0, 2: 0 },
+  });
 
   const [gameCount, setGameCount] = useState(() => {
     const saved = localStorage.getItem('gameCountByDifficulty');
     return saved
       ? JSON.parse(saved)
-      : {
-          default: defaultCount,
-          easy: defaultCount,
-          normal: defaultCount,
-          hard: defaultCount,
-        };
+      : createInitialCount();
   });
 
   // Actualizar el conteo de la dificultad actual cuando hay un ganador
   useEffect(() => {
     if (!winner && winner !== false) return;
 
-    setGameCount(prev => {
+    setGameCount((prev) => {
       const updated = { ...prev };
       const current = { ...updated[difficulty] };
 
@@ -48,16 +48,18 @@ export default function GameCount({ playersInfo, winner, difficulty }) {
     localStorage.setItem('gameCountByDifficulty', JSON.stringify(reset));
   }
 
-  const currentCount = gameCount[difficulty] || defaultCount;
+  const currentCount = gameCount[difficulty] || createInitialCount();
   const difficultyString = {
-    easy: "Fácil",
-    normal: "Normal",
-    hard: "Difícil"
-  }
+    easy: 'Fácil',
+    normal: 'Normal',
+    hard: 'Difícil',
+  };
 
   return (
     <div className="result-count-container">
-      {difficulty !== "default" && <h2>{`Dificultad: ${difficultyString[difficulty]}`}</h2>}
+      {difficulty !== 'default' && (
+        <h2>{`Dificultad: ${difficultyString[difficulty]}`}</h2>
+      )}
       <div className="result-count">
         <p>{`${playersInfo[1].name} ${playersInfo[1].symbol}`}</p>
         <span>{currentCount[1]}</span>

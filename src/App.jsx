@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 
+import { useGameLogic } from './hooks/useGameLogic.js';
 import Player from './Components/Player/Player.jsx';
 import GameBoard from './Components/GameBoard/GameBoard.jsx';
 import Button from './Components/Button/Button.jsx';
@@ -9,74 +9,22 @@ import GameCount from './Components/GameCount/Gamecount.jsx';
 import StepContainer from './Components/StepContainer/StepContainer.jsx';
 import './App.css';
 
-const steps = [
-  'start',
-  'modeSelection',
-  'difficultySelection',
-  'playerSetup',
-  'gameBoard',
-];
-
 function App() {
-  const initialPlayersInfo = {
-    1: {
-      name: 'Jugador 1',
-      symbol: '✖️',
-    },
-    2: {
-      name: 'Jugador 2',
-      symbol: '⭕',
-    },
-  };
-
-  const [stepIndex, setStepIndex] = useState(0);
-  const [playersInfo, setPlayersInfo] = useState(initialPlayersInfo);
-  const [isSinglePlayer, setIsSinglePlayer] = useState(false);
-  const [difficulty, setDifficulty] = useState('default');
-  const [winner, setWinner] = useState(null);
-
-  const gameStep = steps[stepIndex];
-
-  function goToNextStep(param) {
-    setStepIndex((prev) => Math.min(prev + param, steps.length - 1));
-  }
-
-  function goToPrevStep() {
-    if (gameStep === 'gameBoard') {
-      setStepIndex(2);
-      return;
-    }
-
-    setStepIndex((prev) => Math.max(prev - (isSinglePlayer ? 1 : 2), 0));
-
-    if (gameStep === 'difficultySelection') {
-      setPlayersInfo(initialPlayersInfo);
-    }
-  }
-
-  function goToStart() {
-    setStepIndex(0);
-    setIsSinglePlayer(false);
-    setPlayersInfo(initialPlayersInfo);
-    setDifficulty('easy');
-  }
-
-  function setGameMode(param) {
-    setIsSinglePlayer(param);
-    if (param) {
-      setPlayersInfo((prev) => ({
-        ...prev,
-        2: {
-          ...prev[2],
-          name: 'X-O-Tron',
-        },
-      }));
-    }
-  }
-
-  function changeDifficulty(difficulty) {
-    setDifficulty(difficulty);
-  }
+  //Bring all the props from useGameLogic
+  const gameLogic = useGameLogic();
+  const {
+    gameStep,
+    goToNextStep,
+    goToPrevStep,
+    goToStart,
+    setGameMode,
+    changeDifficulty,
+    playersInfo,
+    setPlayersInfo,
+    isSinglePlayer,
+    difficulty,
+    winner,
+  } = gameLogic;
 
   return (
     <>
@@ -202,14 +150,7 @@ function App() {
             {gameStep === 'gameBoard' && (
               <StepContainer id="gameBoardContainer">
                 <GameBoard
-                  goToStart={goToStart}
-                  goToPrevStep={goToPrevStep}
-                  playersInfo={playersInfo}
-                  isSinglePlayer={isSinglePlayer}
-                  difficulty={difficulty}
-                  winner={winner}
-                  setWinner={setWinner}
-                  setDifficulty={setDifficulty}
+                  game={gameLogic}
                 />
               </StepContainer>
             )}
