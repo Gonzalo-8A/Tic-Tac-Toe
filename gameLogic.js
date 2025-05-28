@@ -223,7 +223,6 @@ function getCorner(board) {
   const cornerOption = cornersArray.filter((i) => board[i] === null);
   if (cornerOption.length !== 0) {
     const randomIndex = randomNum(cornerOption);
-    console.log('Go corner');
     return cornerOption[randomIndex];
   }
   return null;
@@ -265,7 +264,6 @@ function randomMove(board) {
     if (cell === null) acc.push(index);
     return acc;
   }, []);
-  console.log('Random Move');
   return indexOptions[randomNum(indexOptions)];
 }
 
@@ -429,7 +427,6 @@ function goWin(board, playersSymbol, aiSymbol, difficulty) {
   if (playerHasDiagonalCorners) {
     const posibleMoves = [1, 3, 5, 7].filter((i) => board[i] === null);
     const randomIndex = randomNum(posibleMoves);
-    console.log(`Go sides ${posibleMoves} ${posibleMoves[randomIndex]}`);
     return posibleMoves[randomIndex];
   }
 
@@ -450,13 +447,11 @@ function goWin(board, playersSymbol, aiSymbol, difficulty) {
       );
 
       const randomIndex = randomNum(filteredOptions);
-      console.log('Block Forks');
       return filteredOptions[randomIndex];
     }
 
     const rivalFork = checkFork(board, playersSymbol, aiSymbol);
     if (rivalFork) {
-      console.log('rivalFork:', rivalFork, 'My options:', offensiveIndexes);
       const filteredOffensiveIndexes = offensiveIndexes.filter(
         (offensiveIndex) => {
           return !winningLines.some((line) => {
@@ -464,22 +459,17 @@ function goWin(board, playersSymbol, aiSymbol, difficulty) {
               const thirdIndex = line.find(
                 (i) => i !== offensiveIndex && i !== rivalFork
               );
-              console.log('BlockFork');
-
               return board[thirdIndex] === aiSymbol;
             }
             return false;
           });
         }
       );
-      console.log(filteredOffensiveIndexes);
       const randomIndex = randomNum(filteredOffensiveIndexes);
-      console.log('randomOffensive');
       return filteredOffensiveIndexes[randomIndex];
     }
   }
   const randomIndex = randomNum(offensiveIndexes);
-  console.log(`Go offensive ${offensiveIndexes[randomIndex]}`);
   return offensiveIndexes[randomIndex];
 }
 
@@ -498,36 +488,29 @@ function getLastMove(board, difficulty) {
 
 export function getAIMove(board, aiSymbol, playersSymbol, difficulty) {
   const winningMove = checkWinningMove(board, aiSymbol);
-  console.log('winningMove llamado. Resultado: ', winningMove);
   if (winningMove !== null) return winningMove;
 
   const blockingMove = checkWinningMove(board, playersSymbol);
-  console.log('blockingMove llamado. Resultado: ', blockingMove);
   if (blockingMove !== null) return blockingMove;
 
   if (difficulty !== 'easy') {
     const goOffensive = offensiveStart(board, aiSymbol, playersSymbol);
-    console.log('goOffensive llamado. Resultado: ', goOffensive);
     if (goOffensive !== null) return goOffensive;
   }
 
   const getCenterMove = getCenter(board);
-  console.log('getCenterMove llamado. Resultado: ', getCenterMove);
   if (getCenterMove !== null) return getCenterMove;
 
   if (difficulty !== 'easy') {
     const forkMove = checkFork(board, aiSymbol, playersSymbol, difficulty);
-    console.log('forkMove llamado. Resultado: ', forkMove);
     if (forkMove !== null) return forkMove;
   }
 
   if (difficulty !== 'easy') {
     const winMove = goWin(board, playersSymbol, aiSymbol, difficulty);
-    console.log('winMove llamado. Resultado: ', winMove);
     if (winMove !== null) return winMove;
   }
 
   const lastMove = getLastMove(board, difficulty);
-  console.log('lastMove llamado. Resultado: ', lastMove);
   if (lastMove !== null) return lastMove;
 }
