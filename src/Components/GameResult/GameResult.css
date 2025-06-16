@@ -4,7 +4,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100%;
+  width: 120%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,8 +30,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
   width: 100%;
+}
+
+.double-btn-container button{
+  width: 50%;
 }
 
 #difficulty-btn {
@@ -58,7 +62,6 @@
 
 .result-btn-container button {
   min-width: 145px;
-  width: 50%;
 }
 
 .winning-line {

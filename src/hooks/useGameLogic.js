@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { checkWinner } from '../../gameLogic';
+import { checkWinner } from '../data/gameLogic.js'
 
 const steps = [
   'start',
@@ -12,7 +12,7 @@ const steps = [
 const initialPlayersInfo = {
   1: {
     name: 'Jugador 1',
-    symbol: '✖️',
+    symbol: 'X',
   },
   2: {
     name: 'Jugador 2',

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import PlayersTurn from '../PlayerTurn/PlayersTurn.jsx';
 import GameResult from '../GameResult/GameResult.jsx';
-import { getWinningLineStyle, getAIMove } from '../../../gameLogic.js';
+import { getWinningLineStyle, getAIMove } from '../../data/gameLogic.js';
 
 import './GameBoard.css';
 
